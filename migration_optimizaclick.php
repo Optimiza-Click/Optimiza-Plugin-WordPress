@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 0.5
+Version: 0.6
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -937,7 +937,7 @@ add_filter( 'login_headerurl', 'logo_url_login' );
 
 //AÑADIMOS LA FUNCIONALIDAD PARA QUE EL PLUGIN BUSQUE ACTUALIZACIONES
 $this_file = __FILE__;
-$update_check = "https://githubversions.optimizaclick.com/";
+$update_check = "https://githubversions.optimizaclick.com/repositories/view/54186440/";
 require_once('update_plugin.php');
 
 ?>
