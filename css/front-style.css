@@ -1,0 +1,13 @@
+@media screen and (min-width: 1560px)
+{
+	.div_cookies{position: fixed !important; z-index: 9999999; padding: 15px 25% 8px; background-color: #fff;display: none; border-top: 1px solid #000;}
+}
+
+@media screen and (max-width: 1559px)
+{
+	.div_cookies{position: fixed !important; z-index: 9999999; padding: 8px 3% 8px; background-color: #fff;display: none; border-top: 1px solid #000;}
+}
+
+.centered{text-align: center;}
+
+#btn_cookies{padding: 8px 35px; line-height: 46px; text-decoration: none;border: 0px !important;}
