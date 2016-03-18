@@ -1,0 +1,4 @@
+.type-product .add_to_cart_button, .type-product .price, .type-product .entry-summary .cart, .type-product .entry-summary .price, 
+.type-product .variations_form{display: none  !important;} 
+
+.shopping-cart-widget, .cart{visibility: hidden  !important;}

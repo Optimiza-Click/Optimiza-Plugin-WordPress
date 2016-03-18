@@ -1,5 +1,50 @@
 <?php
 
+if(isset($_REQUEST['scan_deleted_files']))
+{
+	$value = rglob("../../../*.txt", 0);
+
+	if(isset($_REQUEST['delele_files']) )
+	{
+		foreach($value as $file)
+		{
+			unlink($file);
+		}
+	}
+	else
+	{
+		echo "<tbody>";
+		
+		foreach($value as $file)
+		{
+			echo "<tr><td>".substr($file, 9)." </td><td> ".date('Y/m/d - H:i:s', filemtime($file))." </td><td> ".filesize($file)."</td>";
+			echo "<td>".decoct(fileperms($file) & 0777)."</td></tr>";
+		}
+	}
+		
+	$value = rglob("../../../*.html", 0);
+
+	if(isset($_REQUEST['delele_files']) )
+	{
+		foreach($value as $file)
+		{
+			unlink($file);
+		}
+	}
+	else
+	{
+		foreach($value as $file)
+		{
+			echo "<tr><td>".substr($file, 9)." </td><td> ".date('Y/m/d - H:i:s', filemtime($file))." </td><td> ".filesize($file)."</td>";
+			echo "<td>".decoct(fileperms($file) & 0777)."</td></tr>";
+		}
+	
+		echo "</tbody";
+	}
+}
+
+
+
 if(isset($_REQUEST['scan_files']))
 {
 	$value = rglob("../../../*.php", 0);
@@ -38,9 +83,9 @@ function scan_file($file)
 	$result= "";
 		
 	//ARRAYS CON LOS VALORES A BUSCAR
-	$infected_values = array('/[\'\"\$\\ \/]*?([a-zA-Z0-9]{' .strlen(base64_encode('sergej + swetlana = love.')). ',})/', ' eval(base64_decode', "GLOBALS[", " ?><?php @error_reporting(0)");
+	$infected_values = array('/[\'\"\$\\ \/]*?([a-zA-Z0-9]{' .strlen(base64_encode('sergej + swetlana = love.')). ',})/', " ?><?php @error_reporting(0)");
 	
-	$suspect_values = array('?><?php', 'eval(', '/get_option\s*\(\s*[\'"](.*?)[\'"]\s*\)/');
+	$suspect_values = array('?><?php', 'eval(', '/get_option\s*\(\s*[\'"](.*?)[\'"]\s*\)/', 'eval(base64_decode', "GLOBALS[");
 	
 	$infected_names = array("file.php", "init.php", "css.php", "folder.php", "sytem.php");
 	

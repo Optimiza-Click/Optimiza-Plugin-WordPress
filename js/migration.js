@@ -167,6 +167,64 @@
 	});
 	
 	
+	//BOTON PARA ESCANEAR LOS FICHEROS INNECESARIOS (.TXT Y .HTML)DE LA WEB
+	jQuery("#button_scan_deleted_files").click(function()
+	{	
+		var request = jQuery.ajax({
+			  url: jQuery( "#url_base").val() + "scan.php", 
+			  method: "POST",
+			  data: { scan_deleted_files :  "OK"}	
+		});
+			 
+		request.done(function( content ) 
+		{					
+			jQuery('#scan_deleted_table thead').after(content);		
+				
+			jQuery("#scan_deleted_table").DataTable( 
+			{
+				columnDefs: [ {
+					targets: [ 0 ],
+					orderData: [ 0, 1 ]
+				}, {
+					targets: [ 1 ],
+					orderData: [ 1, 0 ]
+				}, {
+					targets: [ 1 ],
+					orderData: [ 1, 0 ]
+				}, {
+					targets: [ 1 ],
+					orderData: [ 1, 0 ]
+				},{
+					targets: [ 1 ],
+					orderData: [ 1, 0 ]
+				}],
+				paging:         false
+			} );
+		});
+	});
+	
+	//BOTON PARA ELIMINAR LOS FICHEROS INNECESARIOS (.TXT Y .HTML)DE LA WEB
+	jQuery("#button_deleted_files").click(function()
+	{	
+		if(confirm("¿Estas seguro?"))
+		{
+			var request = jQuery.ajax({
+				  url: jQuery( "#url_base").val() + "scan.php", 
+				  method: "POST",
+				  data: { scan_deleted_files :  "OK", delele_files: "OK"}	
+			});
+				 
+			request.done(function( content ) 
+			{					
+				jQuery('#scan_deleted_table tbody').empty();	
+
+				alert("Ficheros eliminados correctamente");		
+
+				jQuery("#scan_deleted_table").destroy();				
+			});
+		}
+	});
+	
 	jQuery("#tabs").tabs();
 	
 	//SE ASOCIADA EL COLOR PICKER A TODOS LOS INPUT DE TIPO COLOR
@@ -194,7 +252,7 @@
 	
 	jQuery("#optimiza_logo_version").change(function(){
 		
-		jQuery("#prev_logo_optimizaclick").css("background-image", 'url("../wp-content/plugins/migration_optimizaclick/img/' + jQuery("#optimiza_logo_version").val() + '")');
+		jQuery("#prev_logo_optimizaclick").css("background-image", 'url("../wp-content/plugins/Optimiza-Plugin-WordPress-master/img/' + jQuery("#optimiza_logo_version").val() + '")');
 		
 	});
 	

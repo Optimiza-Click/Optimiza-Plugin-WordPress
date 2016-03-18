@@ -72,6 +72,9 @@ function generate_backup($dir)
 	//ruta donde guardar los archivos zip, ya debe existir
 	$rutaFinal = "backups";
 	
+	if(! file_exists ($rutaFinal))
+		mkdir($rutaFinal);
+	
 	$archivoZip = "backup".backup_type($dir).date("d-m-Y_G-i-s").".zip";
 
 	if ($zip->open($archivoZip, ZIPARCHIVE::CREATE) === true) 
@@ -88,7 +91,7 @@ function generate_backup($dir)
 		if (file_exists($rutaFinal. "/" . $archivoZip)) 
 		{
 			$fila = "<tr><td>".$archivoZip." </td><td> ".date('Y/m/d - H:i:s', filemtime("./backups/".$archivoZip))." </td><td> ".substr((filesize("./backups/".$archivoZip)/1000000), 0, -4)."</td>
-				<td><a class='button button-primary' href='../wp-content/plugins/migration_optimizaclick/backups/".$archivoZip."'>Descargar</a>&nbsp; 
+				<td><a class='button button-primary' href='../wp-content/plugins/".plugin_name."/backups/".$archivoZip."'>Descargar</a>&nbsp; 
 				<a id='del_".$archivoZip."' class='button button-primary delete_backups'>Eliminar</a></td></tr>";
 			
 			$result = array("message" => "Fichero creado correctamente.","result" => $fila);
