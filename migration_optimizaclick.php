@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 0.6
+Version: 1.1.3
 Plugin URI: http://www.optimizaclick.com/
 */
 
