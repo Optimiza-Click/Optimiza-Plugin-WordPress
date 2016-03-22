@@ -91,8 +91,8 @@ function migration_form()
 							<th scope="row">Boxed footer:</th>
 							<td>
 								<select name="boxed_footer">						
-									<option <?php if("y" == get_option( 'boxed_footer' )) echo "selected"; ?> value="y">Si</option>
 									<option <?php if("n" == get_option( 'boxed_footer' )) echo "selected"; ?> value="n">No</option>
+									<option <?php if("y" == get_option( 'boxed_footer' )) echo "selected"; ?> value="y">Si</option>
 								</select>
 							</td>
 							<th scope="row">Footer fixed Betheme:</th>
@@ -348,16 +348,28 @@ function migration_form()
 							<th scope="row">Ocultar mensaje:</th>
 							<td>
 								<select name="hide_cookies">
-									<option <?php if("boton" == get_option( 'hide_cookies' )) echo "selected"; ?> value="boton">Boton</option>
+									<option <?php if("aceptar" == get_option( 'hide_cookies' )) echo "selected"; ?> value="aceptar">Aceptar</option>
 									<option <?php if("auto" == get_option( 'hide_cookies' )) echo "selected"; ?> value="auto">Automáticamente</option>
 								</select>
 							</td>
+							
+		
+						</tr>
+						<tr>			
 							<th scope="row">Texto button cookies:</th>
 							<td>
 								<input type="text" name="text_button_cookies" value="<?php if(get_option( 'text_button_cookies' ) == "") echo 'Aceptar'; else echo get_option( 'text_button_cookies' ); ?>"/>
 							</td>
-		
-						</tr>
+							<th scope="row">Mensaje cookies:</th>
+							<td colspan="3">
+								<input type="text" name="text_message_cookies" style="width: 100%;" value="<?php if(get_option( 'text_message_cookies' ) != "") echo get_option( 'text_message_cookies' ); else echo "Esta web utiliza cookies. Si sigues navegando entendemos que aceptas las"; ?>" />
+							</th>
+							<th scope="row">Texto enlace cookies:</th>
+							<td colspan="3">
+								<input type="text" name="link_text_cookies" style="width: 100%;" value="<?php if(get_option( 'link_text_cookies' ) != "") echo get_option( 'link_text_cookies' ); else echo "condiciones de uso."; ?>" />
+							</th>
+							
+						</td>
 						
 						<tr>
 							<th scope="row">Background color:</th>
@@ -644,6 +656,8 @@ function migration_optmizaclick_register_options()
 	register_setting( 'migration_optimizaclick_options', 'enable_logout_redirect' );	
 	register_setting( 'migration_optimizaclick_options', 'url_logout_redirect' );	
 	register_setting( 'migration_optimizaclick_options', 'catalog_mode' );	
+	register_setting( 'migration_optimizaclick_options', 'text_message_cookies' );		
+	register_setting( 'migration_optimizaclick_options', 'link_text_cookies' );	
 }
 
 //FUNCION PARA CARGAR SCRIPTS EN EL ADMINISTRADOR
@@ -866,29 +880,36 @@ function header_content()
 {
 	?>
 			<div class="div_cookies" style="display: none;<?php echo get_option('position_cookies'); ?>: 0px; background-color: <?php echo get_option('background_color_cookies'); ?>;">
-				<h4 class="centered" style="color: <?php echo get_option('font_color_cookies'); ?>;">Uso de cookies</h4>
-				<p class="centered" style="color: <?php echo get_option('font_color_cookies'); ?>;">
-					Este sitio web utiliza cookies para que usted tenga la mejor experiencia de usuario. 
-					Si continúa navegando está dando su consentimiento para la aceptación de las mencionadas cookies y la aceptación de nuestra política de cookies, 
-					pinche el enlace para mayor <strong><a style="color: <?php echo get_option('font_color_cookies'); ?>;" target="_blank" 
-					href="<?php echo get_home_url().'/'.get_option('slug_politica_cookies'); ?>">información.</a></strong>
+			
+				<div class="block_cookies">
+					<div <?php if(get_option('hide_cookies') != "auto") echo 'class="col_2_3"' ?>>
 					
-					<input type='hidden' value='<?php echo get_option('hide_cookies'); ?>' id='cookie_mode' />
+					<p class="texto_cookies" style="color: <?php echo get_option('font_color_cookies'); ?>;">
 					
-					<?php
-					
-					if(get_option('hide_cookies') != "auto")
-					{
-						?> 
-							<br/>
-							<a id="btn_cookies" style="color: <?php echo get_option('font_color_button_cookies'); ?>; 
-							background-color: <?php echo get_option('background_button_cookies'); ?>" href="">
-							<?php echo get_option('text_button_cookies'); ?></a>
+						<?php echo get_option("text_message_cookies"); ?>
 						
+						<strong><a style="color: <?php echo get_option('font_color_cookies'); ?>;" target="_blank" 
+						href="<?php echo get_home_url().'/'.get_option('slug_politica_cookies'); ?>"> <?php echo get_option("link_text_cookies"); ?></a></strong>
+						
+						<input type='hidden' value='<?php echo get_option('hide_cookies'); ?>' id='cookie_mode' />
+						</p>
+						</div>
 						<?php
-					}
-					?>
-				</p>
+						
+						if(get_option('hide_cookies') != "auto")
+						{
+							?> 
+								<div class="col_1_3">
+								<span id="btn_cookies" style="color: <?php echo get_option('font_color_button_cookies'); ?>; 
+								background-color: <?php echo get_option('background_button_cookies'); ?>" href="">
+								<?php echo get_option('text_button_cookies'); ?></span></div>
+							
+							<?php
+						}
+						?>
+				
+				</div>
+				
 			</div>
 		
 		<?php
