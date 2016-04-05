@@ -5,15 +5,20 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.1.3
+Version: 1.3
 Plugin URI: http://www.optimizaclick.com/
 */
 
 define("plugin_name", "Optimiza-Plugin-WordPress-master");
 
+$old_url = substr(get_option("old_url_migration"), 1);
+$new_url = get_home_url();
+
 //FUNCION INICIAL PARA AÑADIR LA OPCION DEL PLUGIN EN EL MENU DE HERRAMIENTAS Y CARGAR OTRAS FUNCIONES
 function migration_admin_menu() 
 {
+	global $old_url, $new_url;
+	
 	//add_menu_page( 'migracion', 'Migración', 'read',  'migracion', 'migration_formulario', 'dashicons-admin-tools', 2 );
 	
 	//SE AÑADE UNA OPCION EN EL MENU HERRAMIENTAS PARA MOSTRAR LAS OPCIONES DEL PLUGIN
@@ -34,7 +39,45 @@ function migration_admin_menu()
 	
 	if(get_option('updates_themes') == "n")
 		add_filter('pre_site_transient_update_themes','remove_updates');
+		
+	if($old_url != $new_url ) 
+		complete_migration();
 }
+
+//FUNCION QUE COMPLETA EL CAMBIO DE LINKS EN LA BASE DE DATOS
+function complete_migration()
+{
+	global $wpdb, $old_url, $new_url;
+		
+	$result = $wpdb->get_results( "SELECT option_name FROM ".$wpdb->prefix."options where option_value like '%".$old_url."%' and option_name <> 'old_url_migration'" );
+	
+	foreach($result as $row)
+	{
+		$option = get_option($row->option_name, array());
+		
+		replace_links($option);
+
+		update_option($row->option_name, $option);
+	}
+	
+	update_option("old_url_migration", "-".$new_url);				
+}
+
+//FUNCION PARA REALIZAR EL REEMPLAZO RECURSIVO DE LOS LINKS            
+function replace_links(&$options)
+{
+    global $old_url, $new_url;
+   
+    foreach ($options as $option=>$value)
+    {
+        if(is_array($options[$option]))
+            replace_links($options[$option]);
+		else if(is_array($value))
+            replace_links($value);
+        else
+            $options[$option] = str_replace($old_url, $new_url, $value);
+    }
+}  
 
 //FUNCION PARA DESHABILITAR LAS ACTUALIZACIONES
 function remove_updates()
@@ -52,7 +95,7 @@ function migration_form()
 ?><div class="wrap">
 
 		<h1 class="title_plugin"><span>Optimizaclick Migration Plugin</span></h1>
-
+		
 		<form method="post" action="options.php">
 		
 		<?php settings_fields( 'migration_optimizaclick_options' ); ?>
@@ -111,11 +154,11 @@ function migration_form()
 						<tr>
 							<th scope="row">Background footer:</th>
 							<td>
-								<input type="color" name="footer_background_color" value="<?php echo get_option( 'footer_background_color' ); ?>"/>
+								<input type="color" name="footer_background_color" value="<?php if(get_option( 'footer_background_color' ) != "") echo get_option( 'footer_background_color' ); else echo "#000000;" ?>"/>
 							</td>
 							<th scope="row">Font color footer:</th>
 							<td>
-								<input type="color" name="footer_font_color" value="<?php echo get_option( 'footer_font_color' ); ?>"/>
+								<input type="color" name="footer_font_color" value="<?php if(get_option( 'footer_font_color' ) != "") echo get_option( 'footer_font_color' ); else echo "#ffffff;" ?>"/>
 							</td>
 						</tr>
 						<tr>
@@ -503,16 +546,22 @@ function migration_form()
 						<p>
 						
 						Generar backup: 
-						<select id="generate_backup_url">								
-							<option value="../../../">Completo</option>
-							<option value="../../">WP-content</option>
+						<select id="generate_backup_url">
+							<option value="db">Base de datos</option>							
 							<option value="../">Plugins</option>
 							<option value="../../themes/">Temas</option>
 							<option value="../../uploads/">Uploads</option>
+							<option value="../../../">Wordpress</option>
+							<option value="../../">WP-content</option>
 						</select>
 						
 						
-						<input type="button" class="button button-primary" value="Crear copia de seguridad" id="button_generate_backup" /></p>
+						<input type="button" class="button button-primary" value="Crear copia de seguridad" id="button_generate_backup" />
+						
+						<input type="text" id="url_old_wordpress" value="<?php echo get_home_url(); ?>"/>
+						
+						<input type="text" id="url_new_wordpress" />				
+						</p>
 				</div>
 
 				<div id="tabs-plugins">
@@ -529,7 +578,7 @@ function migration_form()
 							 
 							if (is_dir($dir)) 
 							{
-								if ($dh = scandir($dir, SCANDIR_SORT_ASCENDING)) 
+								if ($dh = scandir($dir)) 
 								{
 									foreach ($dh as $file) 
 									{
@@ -583,7 +632,8 @@ function migration_form()
 		
   </div><?php 
 
-}
+}   
+
 
 //SCRIPTS PARA LA GALERIA DE IMAGENES EN LAS OPCIONES DE LOGIN
 function my_admin_scripts() {    

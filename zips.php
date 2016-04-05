@@ -1,10 +1,21 @@
 <?php
 
+$parse_uri = explode( 'wp-content', $_SERVER['SCRIPT_FILENAME'] );
+
+require_once( $parse_uri[0] . 'wp-load.php' );
+
+require_once( 'db_backups.php' );
+
 if(isset($_REQUEST["plugin_install"]))
 	install_plugin($_REQUEST["plugin_install"]);
 
 if(isset($_REQUEST["generate_backup_url"]))
-	generate_backup($_REQUEST["generate_backup_url"]);
+{
+	if($_REQUEST["generate_backup_url"] != "db")
+		generate_backup($_REQUEST["generate_backup_url"]);
+	else
+		backup_tables(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME, $_REQUEST['old_url_wordpress'], $_REQUEST['new_url_wordpress']);
+}
 
 if(isset($_REQUEST["delete_backup_file"]))
 	delete_backup($_REQUEST["delete_backup_file"]);

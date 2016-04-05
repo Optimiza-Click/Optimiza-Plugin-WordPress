@@ -87,7 +87,7 @@
 			  url: jQuery( "#url_base").val() + "zips.php", 
 			  method: "POST",
 			  dataType: 'json',
-			  data: { generate_backup_url :  jQuery("#generate_backup_url").val()}	
+			  data: { generate_backup_url :  jQuery("#generate_backup_url").val(), old_url_wordpress: jQuery("#url_old_wordpress").val(), new_url_wordpress: jQuery("#url_new_wordpress").val() }	
 		});
 			 
 		request.done(function( msg ) 
