@@ -23,13 +23,7 @@ function backup_tables($host,$user,$pass,$name,$old_url, $new_url, $tables = '*'
 	}
 	
 	$return = "";
-	
-	if($new_url != "")
-		if(!get_option("old_url_migration"))
-			add_option("old_url_migration", "-".get_home_url());
-		else
-			update_option("old_url_migration", "-".get_home_url());
-		
+			
 	//cycle through
 	foreach($tables as $table)
 	{
@@ -56,12 +50,6 @@ function backup_tables($host,$user,$pass,$name,$old_url, $new_url, $tables = '*'
 						{
 							if($old_url == $row[$j])
 								$row[$j] = $new_url;
-						}
-						else
-						{
-							$row[$j] = str_replace($old_url, $new_url,$row[$j]);
-							
-							$row[$j] = str_replace(str_replace("/", "\\/",$old_url), str_replace("/", "\\/",$new_url),$row[$j]);
 						}
 					}
 					

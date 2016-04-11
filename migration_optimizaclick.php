@@ -5,14 +5,12 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.4.1
+Version: 1.4.3
 Plugin URI: http://www.optimizaclick.com/
 */
 
 define("plugin_name", "Optimiza-Plugin-WordPress-master");
 
-$old_url = substr(get_option("old_url_migration"), 1);
-$new_url = get_home_url();
 
 //FUNCION INICIAL PARA AÑADIR LA OPCION DEL PLUGIN EN EL MENU DE HERRAMIENTAS Y CARGAR OTRAS FUNCIONES
 function migration_admin_menu() 
@@ -40,44 +38,7 @@ function migration_admin_menu()
 	if(get_option('updates_themes') == "n")
 		add_filter('pre_site_transient_update_themes','remove_updates');
 		
-	if($old_url != $new_url ) 
-		complete_migration();
 }
-
-//FUNCION QUE COMPLETA EL CAMBIO DE LINKS EN LA BASE DE DATOS
-function complete_migration()
-{
-	global $wpdb, $old_url, $new_url;
-		
-	$result = $wpdb->get_results( "SELECT option_name FROM ".$wpdb->prefix."options where option_value like '%".$old_url."%' and option_name <> 'old_url_migration'" );
-	
-	foreach($result as $row)
-	{
-		$option = get_option($row->option_name, array());
-		
-		replace_links($option);
-
-		update_option($row->option_name, $option);
-	}
-	
-	update_option("old_url_migration", "-".$new_url);				
-}
-
-//FUNCION PARA REALIZAR EL REEMPLAZO RECURSIVO DE LOS LINKS            
-function replace_links(&$options)
-{
-    global $old_url, $new_url;
-   
-    foreach ($options as $option=>$value)
-    {
-        if(is_array($options[$option]))
-            replace_links($options[$option]);
-		else if(is_array($value))
-            replace_links($value);
-        else
-            $options[$option] = str_replace($old_url, $new_url, $value);
-    }
-}  
 
 //FUNCION PARA DESHABILITAR LAS ACTUALIZACIONES
 function remove_updates()
@@ -121,7 +82,7 @@ function migration_form()
 				<div id="tabs-footer">
 						
 					<h2 class="title_migration">Configuración Footer</h2>
-
+					
 					<table class="form-table">
 						<tr>
 							<th scope="row">Mostrar footer:</th>
@@ -257,6 +218,13 @@ function migration_form()
 					
 					<table class="form-table">
 						<tr>
+							<th scope="row">Cambiar estilos login:</th>
+							<td>
+								<select name="enable_login_styles">								
+									<option <?php if("n" == get_option( 'enable_login_styles' )) echo "selected"; ?> value="n">No</option>
+									<option <?php if("y" == get_option( 'enable_login_styles' )) echo "selected"; ?> value="y">Si</option>
+								</select>
+							</td>
 							<th scope="row">URL logo login:</th>
 							<td colspan="2">
 								<input type="text" name="url_logo_image" id="url_logo_image"  value="<?php echo get_option( 'url_logo_image' ); ?>"/>
@@ -618,6 +586,13 @@ function migration_form()
 									<option <?php if("y" == get_option( 'catalog_mode' )) echo "selected"; ?> value="y">Si</option>
 								</select>
 							</td>		
+							<th scope="row">Ocultar precios:</th>
+							<td>
+								<select name="catalog_mode_price">								
+									<option <?php if("n" == get_option( 'catalog_mode_price' )) echo "selected"; ?> value="n">No</option>	
+									<option <?php if("y" == get_option( 'catalog_mode_price' )) echo "selected"; ?> value="y">Si</option>
+								</select>
+							</td>	
 						</tr>				
 					</table>
 				</div>
@@ -708,6 +683,9 @@ function migration_optmizaclick_register_options()
 	register_setting( 'migration_optimizaclick_options', 'catalog_mode' );	
 	register_setting( 'migration_optimizaclick_options', 'text_message_cookies' );		
 	register_setting( 'migration_optimizaclick_options', 'link_text_cookies' );	
+	register_setting( 'migration_optimizaclick_options', 'enable_login_styles' );	
+	register_setting( 'migration_optimizaclick_options', 'catalog_mode_price' );	
+	
 }
 
 //FUNCION PARA CARGAR SCRIPTS EN EL ADMINISTRADOR
@@ -722,8 +700,6 @@ function custom_admin_js()
 	wp_enqueue_script( 'colorpicker_layout', WP_PLUGIN_URL. '/'.plugin_name.'/colorpicker/js/layout.js', array('jquery') );
 	
 	wp_enqueue_script( 'datatables', 'http://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js' );
- 
-
 	
 	//ACCION PARA CARGAR ESTILOS EN LA ADMINISTRACION
 	add_action('admin_head', "custom_admin_styles");
@@ -773,6 +749,13 @@ function custom_js_styles()
 		wp_register_style( 'catalog_mode_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/catalog_mode.css', false, '1.0.0' );
 		
 		wp_enqueue_style( 'catalog_mode_css' );
+	}
+	
+	if(get_option("catalog_mode_price") == "y")
+	{
+		wp_register_style( 'catalog_mode__price_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/catalog_mode_price.css', false, '1.0.0' );
+		
+		wp_enqueue_style( 'catalog_mode__price_css' );
 	}
 }
 
@@ -836,7 +819,8 @@ function custom_login_style()
 }
 
 //ACCION PARA AÑADIR ESTILOS Y SCRIPTS EN LA PAGINA DE LOGIN
-add_action( 'login_head', 'custom_login_style' );
+if(get_option("enable_login_styles") == "y")
+	add_action( 'login_head', 'custom_login_style' );
 
 //SE CARGAN LOS SCRIPTS NECESARIOS PARA EL RECPATCHA DE GOOGLE
 function login_recaptcha_script() 
@@ -1003,7 +987,6 @@ function logo_url_login()
 
 //ACCION PARA CAMBIAR EL LINK DEL LOGO DEL LOGIN
 add_filter( 'login_headerurl', 'logo_url_login' );
-
 
 
 //AÑADIMOS LA FUNCIONALIDAD PARA QUE EL PLUGIN BUSQUE ACTUALIZACIONES
