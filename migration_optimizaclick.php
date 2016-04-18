@@ -5,12 +5,13 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.4.3
+Version: 1.4.4
 Plugin URI: http://www.optimizaclick.com/
 */
 
-define("plugin_name", "Optimiza-Plugin-WordPress-master");
+require_once( dirname(__FILE__) . '/wordpress-sentry.php' );
 
+define("plugin_name", "Optimiza-Plugin-WordPress-master");
 
 //FUNCION INICIAL PARA AÑADIR LA OPCION DEL PLUGIN EN EL MENU DE HERRAMIENTAS Y CARGAR OTRAS FUNCIONES
 function migration_admin_menu() 
@@ -155,7 +156,7 @@ function migration_form()
 							</td>
 							<th scope="row">Alt logo Optimizaclick:</th>
 							<td>
-								<input type="text" name="alt_logo_optimizaclick" value="<?php if(get_option( 'alt_logo_optimizaclick' ) == "") echo 'Posicionamiento SEO';  echo get_option( 'alt_logo_optimizaclick' ); ?>"/>
+								<input type="text" name="alt_logo_optimizaclick" value="<?php if(get_option( 'alt_logo_optimizaclick' ) == "") echo 'Posicionamiento SEO'; else echo get_option( 'alt_logo_optimizaclick' ); ?>"/>
 							</td>
 						</tr>
 					</table>
@@ -519,7 +520,7 @@ function migration_form()
 							<option value="../">Plugins</option>
 							<option value="../../themes/">Temas</option>
 							<option value="../../uploads/">Uploads</option>
-							<option value="../../../">Wordpress</option>
+							<option value="../../../">Wordpress (ficheros)</option>
 							<option value="../../">WP-content</option>
 						</select>
 						
@@ -909,6 +910,20 @@ if(get_option("footer_display") == "y")
 add_action( 'wp_footer', 'footer_content', 100 );
 
 
+//FUNCION PARA AÑADIR EL SCRIPT DE COMPROBACION DE ERRORES JAVASCRIPT PARA SENTRY 
+function footer_scripts()
+{
+	echo '<script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>';
+	
+	$theme = strtoupper (substr(get_bloginfo('template_directory'), strpos(get_bloginfo('template_directory'), "themes") + 7));
+
+	echo "<script> Raven.config('https://1cd56edc3780439a8cf73bfcb493e5ed@sentry.optimizaclick.com/3').setTagsContext({ 'WP_VERSION': '".get_bloginfo('version')."', 'WP_THEME': '".$theme."' }).install(); 
+	
+	</script>";
+}
+
+add_action( 'wp_footer', 'footer_scripts', 101 );
+
 /// FUNCION QUE MUESTRA EL AVISO DE COOKIES, POR DEFECTO ESTA OCULTO POR CSS
 function header_content() 
 {
@@ -922,7 +937,7 @@ function header_content()
 					
 						<?php echo get_option("text_message_cookies"); ?>
 						
-						<strong><a style="color: <?php echo get_option('font_color_cookies'); ?>;" target="_blank" 
+						<strong><a style="text-decoration: underline;color: <?php echo get_option('font_color_cookies'); ?>;" target="_blank" 
 						href="<?php echo get_home_url().'/'.get_option('slug_politica_cookies'); ?>"> <?php echo get_option("link_text_cookies"); ?></a></strong>
 						
 						<input type='hidden' value='<?php echo get_option('hide_cookies'); ?>' id='cookie_mode' />

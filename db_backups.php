@@ -66,6 +66,12 @@ function backup_tables($host,$user,$pass,$name,$old_url, $new_url, $tables = '*'
 	
 	//save file
 	
+	//ruta donde guardar los archivos zip, ya debe existir
+	$rutaFinal = "backups";
+	
+	if(! file_exists ($rutaFinal))
+		mkdir($rutaFinal);
+	
 	$archivo = 'db-backup-'.date("d-m-Y_G-i-s").'.sql';
 	
 	$handle = fopen('./backups/'.$archivo,'w+');
