@@ -13,7 +13,7 @@
 			 
 		request.done(function( msg ) 
 		{		
-			alert(msg);
+			view_messages(msg);
 
 		});
 	});
@@ -30,7 +30,7 @@
 			 
 		request.done(function( msg ) 
 		{		
-			alert(msg);
+			view_messages(msg);
 
 		});
 	});
@@ -51,7 +51,7 @@
 		{		
 			if(msg == "ok")
 			{
-				alert("Plugin instalado correctamente.")
+				view_messages("Plugin instalado correctamente.")
 				
 				boton.css("display", "none");
 				
@@ -59,7 +59,7 @@
 
 			}
 			else
-				alert("¡Error! No se pudo instalar el plugin.");
+				view_messages("¡Error! No se pudo instalar el plugin.");
 
 		});
 	});
@@ -75,7 +75,7 @@
 			 
 		request.done(function( msg ) 
 		{		
-			alert(msg);
+			view_messages(msg);
 
 		});
 	});
@@ -92,7 +92,7 @@
 			 
 		request.done(function( msg ) 
 		{		
-			alert(msg["message"]);
+			view_messages(msg["message"]);
 			jQuery("#backups_table").append(msg["result"]);
 			
 			jQuery(".delete_backups").unbind();
@@ -218,7 +218,7 @@
 			{					
 				jQuery('#scan_deleted_table tbody').empty();	
 
-				alert("Ficheros eliminados correctamente");		
+				view_messages("Ficheros eliminados correctamente");		
 
 				jQuery("#scan_deleted_table").destroy();				
 			});
@@ -255,6 +255,14 @@
 		jQuery("#prev_logo_optimizaclick").css("background-image", 'url("../wp-content/plugins/Optimiza-Plugin-WordPress-master/img/' + jQuery("#optimiza_logo_version").val() + '")');
 		
 	});
+	
+	function view_messages(msg)
+	{
+		jQuery("#messages_plugin").empty();
+		jQuery("#messages_plugin").html(msg);
+		jQuery("#messages_plugin").fadeIn(200);
+		jQuery("#messages_plugin").fadeOut(8000);
+	}
 	
 
 }); 

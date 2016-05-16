@@ -28,15 +28,19 @@ if(isset($_REQUEST['scan_deleted_files']))
 	{
 		foreach($value as $file)
 		{
-			unlink($file);
+			if(strpos($file, "js_composer") === false)
+				unlink($file);
 		}
 	}
 	else
 	{
 		foreach($value as $file)
 		{
-			echo "<tr><td>".substr($file, 9)." </td><td> ".date('Y/m/d - H:i:s', filemtime($file))." </td><td> ".filesize($file)."</td>";
-			echo "<td>".decoct(fileperms($file) & 0777)."</td></tr>";
+			if(strpos($file, "js_composer") === false)
+			{
+				echo "<tr><td>".substr($file, 9)." </td><td> ".date('Y/m/d - H:i:s', filemtime($file))." </td><td> ".filesize($file)."</td>";
+				echo "<td>".decoct(fileperms($file) & 0777)."</td></tr>";
+			}
 		}
 	
 		echo "</tbody";

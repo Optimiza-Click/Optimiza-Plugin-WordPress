@@ -5,13 +5,16 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.4.4
+Version: 1.4.5
 Plugin URI: http://www.optimizaclick.com/
 */
 
 require_once( dirname(__FILE__) . '/wordpress-sentry.php' );
+require_once( dirname(__FILE__) . '/cron.php' );
+require_once( dirname(__FILE__) . '/htaccess.php' );
 
 define("plugin_name", "Optimiza-Plugin-WordPress-master");
+define("respository_url", "https://githubversions.optimizaclick.com/repositories/view/54186440/");
 
 //FUNCION INICIAL PARA AÑADIR LA OPCION DEL PLUGIN EN EL MENU DE HERRAMIENTAS Y CARGAR OTRAS FUNCIONES
 function migration_admin_menu() 
@@ -57,7 +60,7 @@ function migration_form()
 ?><div class="wrap">
 
 		<h1 class="title_plugin"><span>Optimizaclick Migration Plugin</span></h1>
-		
+				
 		<form method="post" action="options.php">
 		
 		<?php settings_fields( 'migration_optimizaclick_options' ); ?>
@@ -306,6 +309,7 @@ function migration_form()
 				<div id="tabs-actualizaciones">
 					
 					<h2 class="title_migration">Configuración Actualizaciones</h2>
+					
 					
 					<table class="form-table">
 						<tr>
@@ -594,6 +598,21 @@ function migration_form()
 									<option <?php if("y" == get_option( 'catalog_mode_price' )) echo "selected"; ?> value="y">Si</option>
 								</select>
 							</td>	
+							
+							<th scope="row">Modifcar productos por página:</th>
+							<td>
+								<select name="enable_produts_page">								
+									<option <?php if("n" == get_option( 'enable_produts_page' )) echo "selected"; ?> value="n">No</option>	
+									<option <?php if("y" == get_option( 'enable_produts_page' )) echo "selected"; ?> value="y">Si</option>
+								</select>
+							</td>	
+							
+							<th scope="row">Productos por página:</th>
+							<td>
+								<input type="text" id="num_produts_page" name="num_produts_page" value="<?php if(get_option( 'num_produts_page' ) != "") echo get_option( 'num_produts_page' ); else echo 12; ?>"/>
+							</td>	
+							
+							
 						</tr>				
 					</table>
 				</div>
@@ -605,6 +624,8 @@ function migration_form()
 			
 			<input type="hidden" value="<?php echo WP_PLUGIN_URL."/".plugin_name."/"; ?>" id="url_base" />
 		</form>
+		
+		<div id="messages_plugin"></div>
 		
   </div><?php 
 
@@ -686,6 +707,8 @@ function migration_optmizaclick_register_options()
 	register_setting( 'migration_optimizaclick_options', 'link_text_cookies' );	
 	register_setting( 'migration_optimizaclick_options', 'enable_login_styles' );	
 	register_setting( 'migration_optimizaclick_options', 'catalog_mode_price' );	
+	register_setting( 'migration_optimizaclick_options', 'num_produts_page' );	
+	register_setting( 'migration_optimizaclick_options', 'enable_produts_page' );	
 	
 }
 
@@ -745,6 +768,7 @@ function custom_js_styles()
 	
 	wp_enqueue_style( 'custom_wp_css' );
 	
+	//SE CARGAN EL CSS QUE OCULTA LOS BOTONES DE AÑADIR LOS PRODUCTOS AL CARRTIO
 	if(get_option("catalog_mode") == "y")
 	{
 		wp_register_style( 'catalog_mode_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/catalog_mode.css', false, '1.0.0' );
@@ -752,6 +776,7 @@ function custom_js_styles()
 		wp_enqueue_style( 'catalog_mode_css' );
 	}
 	
+	//SE CARGA EL CSS PARA OCULTAR LOS PRECIOS DE LOS PRODUCTOS
 	if(get_option("catalog_mode_price") == "y")
 	{
 		wp_register_style( 'catalog_mode__price_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/catalog_mode_price.css', false, '1.0.0' );
@@ -883,7 +908,6 @@ function footer_content()
 	}
 	
 	
-	
 	//SE CARGA EL FOOTER CON LOS ESTILOS ELEGIDOS Y EL ENLACE AL AVISO LEGAL
     echo '<div style="'.$footer_style.' !important;">';
 	
@@ -1003,10 +1027,60 @@ function logo_url_login()
 //ACCION PARA CAMBIAR EL LINK DEL LOGO DEL LOGIN
 add_filter( 'login_headerurl', 'logo_url_login' );
 
+//FUNCION PARA MODIFICAR EL NUMERO DE PRODUCTOS LISTADOS POR PAGINA
+if(get_option("enable_produts_page") == "y")
+	add_filter( 'loop_shop_per_page', create_function( '$cols', 'return '.get_option("num_produts_page").';' ), 20 );
 
-//AÑADIMOS LA FUNCIONALIDAD PARA QUE EL PLUGIN BUSQUE ACTUALIZACIONES
-$this_file = __FILE__;
-$update_check = "https://githubversions.optimizaclick.com/repositories/view/54186440/";
-require_once('update_plugin.php');
+//FUNCION PARA ACTUALIZAR EL PLUGIN
+function auto_update_plugin()
+{
+	$link = get_repository_values("url");
+	
+	$file = "../wp-content/plugins/update.zip";
+	
+	file_put_contents($file, fopen($link, 'r'));
+	
+	$zip = new ZipArchive;
+	
+	if ($zip->open($file) === TRUE) 
+	{
+		$zip->extractTo("../wp-content/plugins/");
+		$zip->close();
+	} 
+	
+	unlink($file);
+	
+	//SE ACTUALIZAN LOS HTACCESS AL REALIZAR LA ACTUALIZACION DEL PLUGIN
+	update_htaccess_security();
+}
+
+//FUNCION QUE DEVUELVE LA VERSION ACTUAL DEL PLUGIN INSTALADO
+function get_version_plugin()
+{
+	if ( ! function_exists( 'get_plugins' ) ) 
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	
+	$plugins = get_plugins(); 
+	
+	return $plugins['Optimiza-Plugin-WordPress-master/migration_optimizaclick.php']["Version"];
+}	
+
+//FUNCION QUE DEVUELVE LA VERSION ACTUAL DEL PLUGIN EN EL RESPOSITORIO DE GITHUB O LA URL DE DESCARGA
+function get_repository_values($data)
+{	
+	$content = file_get_contents(respository_url);
+	
+	$values = explode("|", $content);
+	
+	if($data == "version")
+		return $values[0];
+	else
+		return $values[1]; 
+}
+
+//SE COMPRUEBA SI HAY UNA VERSION MAS ACTUAL DEL PLUGIN EN EL RESPOSITORIO PARA ACTUALIZARSE
+if(get_version_plugin() < get_repository_values("version"))
+	auto_update_plugin();
+
 
 ?>

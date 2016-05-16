@@ -23,3 +23,5 @@
 #scan_table th, #scan_deleted_table th, #plugins_table th, #backups_table th{background-color: grey; color: white;padding: 18px 0px;}
 
 #scan_table td, #scan_table th, #scan_deleted_table td, #scan_deleted_table th, #plugins_table td, #plugins_table th, #backups_table td, #backups_table th{border: 1px solid grey;}
+
+#messages_plugin{background-color: #00B2DB; color: #fff; padding: 20px 50px;display: none;}
