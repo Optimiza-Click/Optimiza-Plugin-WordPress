@@ -158,7 +158,7 @@ function scan_file($file)
 //FUNCION QUE CAMBIA LOS PERMISOS DE LOS DIRECTORIOS Y FICHEROS
 function change_file_permissions()
 {
-	$messsage = "";
+	$message = "";
 	
 	//SE COMPRUEBA SI EL SERVIDOR ES WINDOWS
 	if(strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')

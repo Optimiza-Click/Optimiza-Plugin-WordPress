@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.4.5
+Version: 1.4.6
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -113,17 +113,17 @@ function migration_form()
 							</td>
 							<th scope="row">Footer width:</th>
 							<td>
-								<input type="text" name="footer_width" value="<?php echo get_option( 'footer_width' ); ?>"/>
+								<input type="text" name="footer_width" value="<?php if(get_option( 'footer_width' ) != "") echo get_option( 'footer_width' ); else echo "100%"; ?>"/>
 							</td>					
 						</tr>
 						<tr>
 							<th scope="row">Background footer:</th>
 							<td>
-								<input type="color" name="footer_background_color" value="<?php if(get_option( 'footer_background_color' ) != "") echo get_option( 'footer_background_color' ); else echo "#000000;" ?>"/>
+								<input type="color" name="footer_background_color" value="<?php if(get_option( 'footer_background_color' ) != "") echo get_option( 'footer_background_color' ); else echo "#000000" ?>"/>
 							</td>
 							<th scope="row">Font color footer:</th>
 							<td>
-								<input type="color" name="footer_font_color" value="<?php if(get_option( 'footer_font_color' ) != "") echo get_option( 'footer_font_color' ); else echo "#ffffff;" ?>"/>
+								<input type="color" name="footer_font_color" value="<?php if(get_option( 'footer_font_color' ) != "") echo get_option( 'footer_font_color' ); else echo "#ffffff" ?>"/>
 							</td>
 						</tr>
 						<tr>
@@ -974,7 +974,7 @@ function header_content()
 							?> 
 								<div class="col_1_3">
 								<span id="btn_cookies" style="color: <?php echo get_option('font_color_button_cookies'); ?>; 
-								background-color: <?php echo get_option('background_button_cookies'); ?>" href="">
+								background-color: <?php echo get_option('background_button_cookies'); ?>">
 								<?php echo get_option('text_button_cookies'); ?></span></div>
 							
 							<?php
@@ -1036,18 +1036,21 @@ function auto_update_plugin()
 {
 	$link = get_repository_values("url");
 	
-	$file = "../wp-content/plugins/update.zip";
+	$file = "../wp-content/plugins/optimiza_plugin_update.zip";
 	
+	//SE DESCARGA EL .ZIP CON LA ULTIMA VERSION DEL PLUGIN
 	file_put_contents($file, fopen($link, 'r'));
 	
 	$zip = new ZipArchive;
 	
+	//SE DESCOMPRIME Y REEMPLAZAN LOS FICHEROS DEL PLUGIN PARA DEJARLO ACTUALIZADO
 	if ($zip->open($file) === TRUE) 
 	{
 		$zip->extractTo("../wp-content/plugins/");
 		$zip->close();
 	} 
 	
+	//SE ELIMINA EL .ZIP
 	unlink($file);
 	
 	//SE ACTUALIZAN LOS HTACCESS AL REALIZAR LA ACTUALIZACION DEL PLUGIN
