@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.4.7
+Version: 1.4.8
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -914,16 +914,16 @@ function footer_content()
 	else
 		echo '<div style="width: '.get_option('footer_width').';padding: 3px 0px;margin: 0 auto !important;">';
 	
-	echo "<div class='columns_3_footer'>";
+	echo "<div class='columns_1_4_footer'>";
 	echo '<p style="padding-left: 5%;padding-top: 5px;color:'.get_option( 'footer_font_color' ).'">® '.date("Y").' '.get_option( 'name_empresa' ).' 
 		- <a style="color:'.get_option( 'footer_font_color' ).'" href="'.get_home_url().'/'.get_option('slug_aviso_legal').'">'.get_option('title_aviso_legal').'
 		</a></p>';
 		
-	echo "</div><div class='columns_3_footer'>";
+	echo "</div><div class='columns_1_2_footer'>";
 	
 	dynamic_sidebar( 'widget_area_footer_plugin' );	
 	
-	echo "</div><div class='columns_3_footer'>";
+	echo "</div><div class='columns_1_4_footer'>";
 	
 	//SE MUESTRA EL LOGO DE OPTIMIZACLICK
 	if(get_option('optimiza_logo_display') == 'y')
@@ -1038,62 +1038,8 @@ add_filter( 'login_headerurl', 'logo_url_login' );
 if(get_option("enable_produts_page") == "y")
 	add_filter( 'loop_shop_per_page', create_function( '$cols', 'return '.get_option("num_produts_page").';' ), 20 );
 
-//FUNCION PARA ACTUALIZAR EL PLUGIN
-function auto_update_plugin()
-{
-	$link = get_repository_values("url");
-	
-	$file = "../wp-content/plugins/optimiza_plugin_update.zip";
-	
-	//SE DESCARGA EL .ZIP CON LA ULTIMA VERSION DEL PLUGIN
-	file_put_contents($file, fopen($link, 'r'));
-	
-	$zip = new ZipArchive;
-	
-	//SE DESCOMPRIME Y REEMPLAZAN LOS FICHEROS DEL PLUGIN PARA DEJARLO ACTUALIZADO
-	if ($zip->open($file) === TRUE) 
-	{
-		$zip->extractTo("../wp-content/plugins/");
-		$zip->close();
-	} 
-	
-	//SE ELIMINA EL .ZIP
-	unlink($file);
-	
-	//SE ACTUALIZAN LOS HTACCESS AL REALIZAR LA ACTUALIZACION DEL PLUGIN
-	update_htaccess_security();
-}
 
-//FUNCION QUE DEVUELVE LA VERSION ACTUAL DEL PLUGIN INSTALADO
-function get_version_plugin()
-{
-	if ( ! function_exists( 'get_plugins' ) ) 
-        require_once ABSPATH . 'wp-admin/includes/plugin.php';
-	
-	$plugins = get_plugins(); 
-	
-	return $plugins['Optimiza-Plugin-WordPress-master/migration_optimizaclick.php']["Version"];
-}	
-
-//FUNCION QUE DEVUELVE LA VERSION ACTUAL DEL PLUGIN EN EL RESPOSITORIO DE GITHUB O LA URL DE DESCARGA
-function get_repository_values($data)
-{	
-	$content = file_get_contents(respository_url);
-	
-	$values = explode("|", $content);
-	
-	if($data == "version")
-		return $values[0];
-	else
-		return $values[1]; 
-}
-
-//SE COMPRUEBA SI HAY UNA VERSION MAS ACTUAL DEL PLUGIN EN EL RESPOSITORIO PARA ACTUALIZARSE
-if(get_version_plugin() < get_repository_values("version"))
-	auto_update_plugin();
-
-
-
+//SE GENERA UN AREA DE WIDGET PARA EL FOOTER FINAL
 function widget_area_footer_plugin() {
 
 	register_sidebar( array(
@@ -1105,6 +1051,7 @@ function widget_area_footer_plugin() {
 		'after_title' => '</h3>',
 	) );
 }
+
 add_action( 'widgets_init', 'widget_area_footer_plugin' );
 
 ?>

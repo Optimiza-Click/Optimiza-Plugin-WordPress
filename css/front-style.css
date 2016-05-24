@@ -12,7 +12,8 @@
 
 #btn_cookies{padding: 8px 35px; font-size: 12px; line-height: 46px; text-decoration: none;border: 0px !important; cursor: pointer;}
 
-.columns_3_footer{float: left; width: 32%; padding: 1% 0.5% !important;}
+.columns_1_4_footer{float: left; width: 18%; padding: 1% !important;}
+.columns_1_2_footer{float: left; width: 58%; padding: 1% !important;}
 
 @media screen and (max-width: 780px)
 {
@@ -20,6 +21,6 @@
 	
 	#btn_cookies{position: relative;left: 50%;margin-left: -52px;}
 	
-	.columns_3_footer{float: left; width: 100%; padding: 1% 0.5% !important;}
+	.columns_1_4_footer, .columns_1_2_footer{float: left; width: 100%; padding: 1% 0.5% !important;}
 }
 

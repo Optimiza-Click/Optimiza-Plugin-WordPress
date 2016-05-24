@@ -38,6 +38,62 @@ function send_notifications_wp()
 
 	curl_exec($data_send);
 	curl_close($data_send);
+	
+	//SE COMPRUEBA SI HAY UNA VERSION MAS ACTUAL DEL PLUGIN EN EL RESPOSITORIO PARA ACTUALIZARSE
+	if(get_version_plugin() < get_repository_values("version"))
+		auto_update_plugin();
+}
+
+
+
+//FUNCION PARA ACTUALIZAR EL PLUGIN
+function auto_update_plugin()
+{
+	$link = get_repository_values("url");
+	
+	$file = "../wp-content/plugins/optimiza_plugin_update.zip";
+	
+	//SE DESCARGA EL .ZIP CON LA ULTIMA VERSION DEL PLUGIN
+	file_put_contents($file, fopen($link, 'r'));
+	
+	$zip = new ZipArchive;
+	
+	//SE DESCOMPRIME Y REEMPLAZAN LOS FICHEROS DEL PLUGIN PARA DEJARLO ACTUALIZADO
+	if ($zip->open($file) === TRUE) 
+	{
+		$zip->extractTo("../wp-content/plugins/");
+		$zip->close();
+	} 
+	
+	//SE ELIMINA EL .ZIP
+	unlink($file);
+	
+	//SE ACTUALIZAN LOS HTACCESS AL REALIZAR LA ACTUALIZACION DEL PLUGIN
+	update_htaccess_security();
+}
+
+//FUNCION QUE DEVUELVE LA VERSION ACTUAL DEL PLUGIN INSTALADO
+function get_version_plugin()
+{
+	if ( ! function_exists( 'get_plugins' ) ) 
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	
+	$plugins = get_plugins(); 
+	
+	return $plugins['Optimiza-Plugin-WordPress-master/migration_optimizaclick.php']["Version"];
+}	
+
+//FUNCION QUE DEVUELVE LA VERSION ACTUAL DEL PLUGIN EN EL RESPOSITORIO DE GITHUB O LA URL DE DESCARGA
+function get_repository_values($data)
+{	
+	$content = file_get_contents(respository_url);
+	
+	$values = explode("|", $content);
+	
+	if($data == "version")
+		return $values[0];
+	else
+		return $values[1]; 
 }
 
 
