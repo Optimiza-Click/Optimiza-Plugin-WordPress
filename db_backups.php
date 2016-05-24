@@ -64,6 +64,8 @@ function backup_tables($host,$user,$pass,$name,$old_url, $new_url, $tables = '*'
 		$return.="\n\n\n";
 	}
 	
+	$return = str_replace("utf8mb4", "utf8", $return);
+	
 	//save file
 	
 	//ruta donde guardar los archivos zip, ya debe existir
@@ -74,9 +76,8 @@ function backup_tables($host,$user,$pass,$name,$old_url, $new_url, $tables = '*'
 	
 	$archivo = 'db-backup-'.date("d-m-Y_G-i-s").'.sql';
 	
-	$handle = fopen('./backups/'.$archivo,'w+');
-	fwrite($handle,$return);
-	fclose($handle);
+	$data = mb_convert_encoding($return, 'UTF-8', 'OLD-ENCODING');
+	file_put_contents('./backups/'.$archivo, $data);
 	
 	$fila = "<tr><td>".$archivo." </td><td> ".date('Y/m/d - H:i:s', filemtime("./backups/".$archivo))." </td><td> ".substr((filesize("./backups/".$archivo)/1000000), 0, -4)."</td>
 				<td><a class='button button-primary' href='../wp-content/plugins/".plugin_name."/backups/".$archivo."'>Descargar</a>&nbsp; 

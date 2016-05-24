@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.4.6
+Version: 1.4.7
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -18,11 +18,7 @@ define("respository_url", "https://githubversions.optimizaclick.com/repositories
 
 //FUNCION INICIAL PARA AÑADIR LA OPCION DEL PLUGIN EN EL MENU DE HERRAMIENTAS Y CARGAR OTRAS FUNCIONES
 function migration_admin_menu() 
-{
-	global $old_url, $new_url;
-	
-	//add_menu_page( 'migracion', 'Migración', 'read',  'migracion', 'migration_formulario', 'dashicons-admin-tools', 2 );
-	
+{	
 	//SE AÑADE UNA OPCION EN EL MENU HERRAMIENTAS PARA MOSTRAR LAS OPCIONES DEL PLUGIN
 	$menu = add_management_page( 'Migración', 'Migración', 'read',  'migracion', 'migration_form');
 	
@@ -47,7 +43,9 @@ function migration_admin_menu()
 //FUNCION PARA DESHABILITAR LAS ACTUALIZACIONES
 function remove_updates()
 {
-    global $wp_version;return(object) array('last_checked'=> time(),'version_checked'=> $wp_version,);
+    global $wp_version;
+	
+	return(object) array('last_checked'=> time(),'version_checked'=> $wp_version,);
 }
 
 //ACCION INICIAL PARA AÑADIR LA OPCION DEL PLUGIN EN EL MENU DE HERRAMIENTAS
@@ -892,7 +890,7 @@ if(get_option('recaptcha_google_activate') == "y")
 //FUNCION PARA MOSTRAR EL FOOTER CON EL AVISO LEGAL Y EL LOGO DE OPTIMIZACLICK
 function footer_content() 
 {
-	$footer_style = 'width: 100%;height:80px;position:relative;z-indez:99999;background-color: '.get_option( 'footer_background_color' ).';color: '.get_option( 'footer_font_color' ).';';
+	$footer_style = 'width: 100%;float:left;position:relative;z-indez:99999;background-color: '.get_option( 'footer_background_color' ).';color: '.get_option( 'footer_font_color' ).';';
 	
 	if(get_option("boxed_footer") == "y")
 		$footer_style .= 'max-width: '.get_option('footer_width').';margin: 0 auto;';
@@ -902,9 +900,9 @@ function footer_content()
 	//ESTILOS PARA EL SLIDYNG FOOTER DE BETHEME
 	if(get_option( 'footer_betheme' ) == "y") 
 	{
-		$footer_style .= "position: fixed;float: left;z-index: 1;bottom: 0px;";
+		$footer_style .= "position: fixed;z-index: 1;bottom: 0px;";
 
-		echo "<style>#Footer{bottom: 80px !important;z-index: 1 !important;}</style>";
+		echo "<style>#Footer{bottom: 100px !important;z-index: 1 !important;}</style>";
 	}
 	
 	
@@ -912,21 +910,30 @@ function footer_content()
     echo '<div style="'.$footer_style.' !important;">';
 	
 	if(get_option("boxed_footer") == "y")
-		echo '<div style="max-width: 100%;padding: 20px 0px;margin: 0 auto !important;">';
+		echo '<div style="max-width: 100%;padding: 3px 0px;margin: 0 auto !important;">';
 	else
-		echo '<div style="width: '.get_option('footer_width').';padding: 20px 0px;margin: 0 auto !important;">';
+		echo '<div style="width: '.get_option('footer_width').';padding: 3px 0px;margin: 0 auto !important;">';
 	
-	echo '<p style="float: left;padding-left: 5%;padding-top: 5px;color:'.get_option( 'footer_font_color' ).'">® '.date("Y").' '.get_option( 'name_empresa' ).' 
+	echo "<div class='columns_3_footer'>";
+	echo '<p style="padding-left: 5%;padding-top: 5px;color:'.get_option( 'footer_font_color' ).'">® '.date("Y").' '.get_option( 'name_empresa' ).' 
 		- <a style="color:'.get_option( 'footer_font_color' ).'" href="'.get_home_url().'/'.get_option('slug_aviso_legal').'">'.get_option('title_aviso_legal').'
 		</a></p>';
+		
+	echo "</div><div class='columns_3_footer'>";
+	
+	dynamic_sidebar( 'widget_area_footer_plugin' );	
+	
+	echo "</div><div class='columns_3_footer'>";
 	
 	//SE MUESTRA EL LOGO DE OPTIMIZACLICK
 	if(get_option('optimiza_logo_display') == 'y')
-		echo	'<a style="float: right;padding-right: 5%;" href="http://www.optimizaclick.com/" target="_blank" title="'.get_option('alt_logo_optimizaclick').'">
+		echo	'<a style="float:right;padding-right: 5%;" href="http://www.optimizaclick.com/" target="_blank" title="'.get_option('alt_logo_optimizaclick').'">
 			<img src="'.WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version').'" alt="'.get_option('alt_logo_optimizaclick').'" />
 		</a>';
+		
+		
 	
-	echo '</div></div>';
+	echo '</div></div></div>';
 }
 
 //ACTION PARA AÑADIR EL FOOTER
@@ -1085,5 +1092,19 @@ function get_repository_values($data)
 if(get_version_plugin() < get_repository_values("version"))
 	auto_update_plugin();
 
+
+
+function widget_area_footer_plugin() {
+
+	register_sidebar( array(
+		'name' => 'Optimizaclick Widget Area',
+		'id' => 'widget_area_footer_plugin',
+		'before_widget' => '<div class="widget">',
+		'after_widget' => '</div>',
+		'before_title' => '<h3>',
+		'after_title' => '</h3>',
+	) );
+}
+add_action( 'widgets_init', 'widget_area_footer_plugin' );
 
 ?>
