@@ -1,15 +1,15 @@
 <?php
 
 //SE REGISTRA UNA ACCION PARA QUE SE EJECUTE DIARIAMENTE
-register_activation_hook(__FILE__, 'notificactions_wp');
+register_activation_hook(__FILE__, 'optimiza_notifications_activate');
 
-function notificactions_wp() 
+function optimiza_notifications_activate() 
 {
-    if (! wp_next_scheduled ( 'notificactions_wp' )) 
-		wp_schedule_event(time(), 'daily', 'notificactions_wp');
+    if (! wp_next_scheduled ( 'optimiza_notifications' )) 
+		wp_schedule_event(time(), 'daily', 'optimiza_notifications');
 }
 
-add_action('notificactions_wp', 'send_notifications_wp');
+add_action('optimiza_notifications', 'send_notifications_wp');
 
 //FUNCION PARA ENVIAR LOS DATOS REFERENTES A WORDPRESS Y PLUGINS INSTALADOS
 function send_notifications_wp() 
@@ -38,12 +38,25 @@ function send_notifications_wp()
 
 	curl_exec($data_send);
 	curl_close($data_send);
-	
+}
+
+//SE REGISTRA UNA ACCION PARA QUE SE EJECUTE CADA HORA
+register_activation_hook(__FILE__, 'optimiza_auto_updates_activate');
+
+function optimiza_auto_updates_activate() 
+{
+	if (! wp_next_scheduled ( 'optimiza_plugin_auto_update' )) 
+		wp_schedule_event(time(), 'hourly', 'optimiza_plugin_auto_update');
+}
+
+add_action('optimiza_plugin_auto_update', 'check_update_optimiza_plugin');
+
+function check_update_optimiza_plugin()
+{
 	//SE COMPRUEBA SI HAY UNA VERSION MAS ACTUAL DEL PLUGIN EN EL RESPOSITORIO PARA ACTUALIZARSE
 	if(get_version_plugin() < get_repository_values("version"))
 		auto_update_plugin();
 }
-
 
 
 //FUNCION PARA ACTUALIZAR EL PLUGIN

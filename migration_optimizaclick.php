@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.4.9
+Version: 1.5.0
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -13,6 +13,8 @@ define("plugin_name", "Optimiza-Plugin-WordPress-master");
 define("respository_url", "https://githubversions.optimizaclick.com/repositories/view/54186440/");
 
 require_once( dirname(__FILE__) . '/wordpress-sentry.php' );
+require_once( dirname(__FILE__) . '/htaccess.php' );
+require_once( dirname(__FILE__) . '/cron.php' );
 
 //FUNCION INICIAL PARA AÑADIR LA OPCION DEL PLUGIN EN EL MENU DE HERRAMIENTAS Y CARGAR OTRAS FUNCIONES
 function migration_admin_menu() 
@@ -34,11 +36,7 @@ function migration_admin_menu()
 		add_filter('pre_site_transient_update_plugins','remove_updates');
 	
 	if(get_option('updates_themes') == "n")
-		add_filter('pre_site_transient_update_themes','remove_updates');
-	
-	require_once( dirname(__FILE__) . '/htaccess.php' );
-	require_once( dirname(__FILE__) . '/cron.php' );
-		
+		add_filter('pre_site_transient_update_themes','remove_updates');		
 }
 
 //FUNCION PARA DESHABILITAR LAS ACTUALIZACIONES
