@@ -22,22 +22,28 @@ if(isset($_REQUEST["delete_backup_file"]))
 
 
 //FUNCION PARA DESCOMPRIMIR LOS FICHEROS DEL PLUGIN QUE SE QUIERE INSTALAR
-function install_plugin($plugin)
-{
+function install_plugin($link)
+{	
+	$file = "../plugin_update.zip";
+	
+	//SE DESCARGA EL .ZIP CON LA ULTIMA VERSION DEL PLUGIN
+	$result = file_put_contents($file, fopen($link, 'r'));
+	
 	$zip = new ZipArchive;
 	
-	$res = $zip->open('./plugins/'.$plugin.'.zip');
-	
-	if ($res === TRUE) 
+	//SE DESCOMPRIME Y REEMPLAZAN LOS FICHEROS DEL PLUGIN PARA DEJARLO ACTUALIZADO
+	if ($zip->open($file) === TRUE) 
 	{
-		$zip->extractTo('../');
+		$zip->extractTo("../");
+		$zip->close();
 		
-		echo 'ok';
+		echo "ok";
 	} 
-	else 
-		echo 'error';
+	else
+		echo $result;
 	
-	$zip->close();
+	//SE ELIMINA EL .ZIP
+	unlink($file);
 }
 
 

@@ -44,7 +44,7 @@
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "zips.php", 
 			  method: "POST",
-			  data: { plugin_install :  boton.attr("id").substring(8)}	
+			  data: { plugin_install :  jQuery("#val_" + boton.attr("id").substring(8) ).val()}	
 		});
 			 
 		request.done(function( msg ) 

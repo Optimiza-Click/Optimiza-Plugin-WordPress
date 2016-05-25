@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.5.0
+Version: 1.5.1
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -543,28 +543,31 @@ function migration_form()
 						<tbody>
 						
 						<?php
-					
-							$dir = "../wp-content/plugins/".plugin_name."/plugins/";
-							 
-							if (is_dir($dir)) 
+							//DIRECTORIO DE Plugins
+							$dir = "../wp-content/plugins/";
+							
+							//ARRAY CON LOS DATOS DE PLUGINS RECOMENDADOS
+							$plugins = array(
+											"Akismet" => array( "slug" => "akismet", "url" => "https://downloads.wordpress.org/plugin/akismet.3.1.11.zip"),
+											"All in One SEO Pack" => array( "slug" => "all-in-one-seo-pack", "url" => "https://downloads.wordpress.org/plugin/all-in-one-seo-pack.2.3.4.2.zip"),
+											"Contact form to Database" => array( "slug" => "contact-form-7-to-database-extension", "url" => "https://downloads.wordpress.org/plugin/contact-form-7-to-database-extension.2.10.13.zip"),
+											"Contact Form 7" => array( "slug" => "contact-form-7", "url" => "https://downloads.wordpress.org/plugin/contact-form-7.4.4.2.zip"),
+											"Updraft Plus" => array( "slug" => "updraftplus", "url" => "https://downloads.wordpress.org/plugin/updraftplus.1.12.12.zip"),
+											"WP Migrate DB" => array("slug" => "wp-migrate-db", "url" => "https://downloads.wordpress.org/plugin/wp-migrate-db.0.8.zip"),
+											"WP Mandrill" => array( "slug" => "wpmandrill", "url" => "https://downloads.wordpress.org/plugin/wpmandrill.zip")
+											);
+									
+							//SE LISTAN QUE PLUGINS RECOMENDADOS ESTAN INSTALADOS
+							foreach($plugins as $plugin=>$key)
 							{
-								if ($dh = scandir($dir)) 
-								{
-									foreach ($dh as $file) 
-									{
-										if($file != "." && $file != "..")
-										{
-											echo "<tr><td>".ucwords(str_replace("-", " ",substr($file, 0, -4)))."</td>";
-											
-											if(file_exists("../wp-content/plugins/".substr($file, 0, -4)) )
-												echo "<td><span id='mess_".substr($file, 0, -4)."'>Instalado</span></td><td></td></tr>";
-											else
-												echo "<td><span id='mess_".substr($file, 0, -4)."'>No Instalado</span></td><td><input type='button' class='button button-primary install_plugins' value='Instalar' id='install_".substr($file, 0, -4)."' /></td></tr>";
-										}
-									}
+								echo "<tr><td>".$plugin."<input type='hidden' id='val_".$key["slug"]."' value='".$key["url"]."' /></td>";
 								
-								}
-							}
+								if(file_exists($dir.$key["slug"]))							
+									echo "<td><span id='mess_".$key["slug"]."'>Instalado</span></td><td></td></tr>";
+								else
+									echo "<td><span id='mess_".$key["slug"]."'>No Instalado</span></td><td><input type='button' class='button button-primary install_plugins' value='Instalar' id='install_".$key["slug"]."' /></td></tr>";
+							}							
+							 
 						
 						?>
 												
