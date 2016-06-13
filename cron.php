@@ -1,16 +1,5 @@
 <?php
 
-//SE REGISTRA UNA ACCION PARA QUE SE EJECUTE DIARIAMENTE
-register_activation_hook(__FILE__, 'optimiza_notifications_activate');
-
-function optimiza_notifications_activate() 
-{
-    if (! wp_next_scheduled ( 'optimiza_notifications' )) 
-		wp_schedule_event(time(), 'daily', 'optimiza_notifications');
-}
-
-add_action('optimiza_notifications', 'send_notifications_wp');
-
 //FUNCION PARA ENVIAR LOS DATOS REFERENTES A WORDPRESS Y PLUGINS INSTALADOS
 function send_notifications_wp() 
 {
@@ -39,23 +28,13 @@ function send_notifications_wp()
 	curl_exec($data_send);
 	curl_close($data_send);
 }
-
-//SE REGISTRA UNA ACCION PARA QUE SE EJECUTE CADA HORA
-register_activation_hook(__FILE__, 'optimiza_auto_updates_activate');
-
-function optimiza_auto_updates_activate() 
-{
-	if (! wp_next_scheduled ( 'optimiza_plugin_auto_update' )) 
-		wp_schedule_event(time(), 'hourly', 'optimiza_plugin_auto_update');
-}
-
-add_action('optimiza_plugin_auto_update', 'check_update_optimiza_plugin');
-
+check_update_optimiza_plugin();
+//FUNUCION QUE COMPRUEBA SI HAY UNA VERSION NUEVA DEL PLUGIN PARA ACTUALIZARLO
 function check_update_optimiza_plugin()
 {
 	//SE COMPRUEBA SI HAY UNA VERSION MAS ACTUAL DEL PLUGIN EN EL RESPOSITORIO PARA ACTUALIZARSE
 	if(get_version_plugin() < get_repository_values("version"))
-		auto_update_plugin();
+		auto_update_plugin();	
 }
 
 
@@ -64,7 +43,19 @@ function auto_update_plugin()
 {
 	$link = get_repository_values("url");
 	
-	$file = "../wp-content/plugins/optimiza_plugin_update.zip";
+	//SE COMPRUEBA EL DIRECTORIO ACTUAL PARA PODER GUARDAR EL .ZIP CON LA ACTUALIZACION
+	if(strpos($_SERVER['REQUEST_URI'], "/wp-admin/") === false)
+	{
+		$file = "./wp-content/plugins/optimiza_plugin_update.zip";
+	
+		$dir = "./wp-content/plugins/";
+	}
+	else
+	{		
+		$file = "../wp-content/plugins/optimiza_plugin_update.zip";
+	
+		$dir = "../wp-content/plugins/";
+	}
 	
 	//SE DESCARGA EL .ZIP CON LA ULTIMA VERSION DEL PLUGIN
 	file_put_contents($file, fopen($link, 'r'));
@@ -74,7 +65,7 @@ function auto_update_plugin()
 	//SE DESCOMPRIME Y REEMPLAZAN LOS FICHEROS DEL PLUGIN PARA DEJARLO ACTUALIZADO
 	if ($zip->open($file) === TRUE) 
 	{
-		$zip->extractTo("../wp-content/plugins/");
+		$zip->extractTo($dir);
 		$zip->close();
 	} 
 	

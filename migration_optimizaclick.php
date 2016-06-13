@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.5.1
+Version: 1.5.3
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -59,7 +59,7 @@ function migration_form()
 		<h1 class="title_plugin"><span>Optimizaclick Migration Plugin</span></h1>
 				
 		<form method="post" action="options.php">
-		
+				
 		<?php settings_fields( 'migration_optimizaclick_options' ); ?>
 		<?php do_settings_sections( 'migration_optimizaclick_options' ); ?>		
 		
@@ -1053,5 +1053,35 @@ function widget_area_footer_plugin() {
 }
 
 add_action( 'widgets_init', 'widget_area_footer_plugin' );
+
+//SE ACTIVAN LAS ACTIVIDADES CRON DEL PLUGIN AL SER ACTIVADO
+register_activation_hook(__FILE__, 'activate_cron_accions');
+
+//SE ASOCIA UNA FUNCION AL ACTIVARSE EL PLUGIN
+function activate_cron_accions() 
+{
+	//SE REGISTRA UNA ACCION PARA QUE SE EJECUTE DIARIAMENTE
+    if (! wp_next_scheduled ( 'optimiza_notifications' )) 
+		wp_schedule_event(time(), 'daily', 'optimiza_notifications');
+	
+	//SE REGISTRA UNA ACCION PARA QUE SE EJECUTE 2 VECES AL DIA
+	if (! wp_next_scheduled ( 'optimiza_plugin_auto_update' )) 
+		wp_schedule_event(time(), 'twicedaily', 'optimiza_plugin_auto_update');	
+}
+
+//SE ASOCIAN LAS FUNCIONES QUE REALIZARAN LAS ACCIONES DE LAS ACTIVIDADES DEL CRON
+add_action('optimiza_notifications', 'send_notifications_wp');
+
+add_action('optimiza_plugin_auto_update', 'check_update_optimiza_plugin');
+
+//SE ASOCIA UNA FUNCION AL DESACTIVAR EL PLUGIN
+register_deactivation_hook(__FILE__, 'my_deactivation');
+
+//SE CANCELAN LAS ACTIVIDADES CRON DEL PLUGIN AL SER DESACTIVADO
+function my_deactivation() 
+{
+	wp_clear_scheduled_hook('optimiza_plugin_auto_update');
+	wp_clear_scheduled_hook('optimiza_notifications');
+}
 
 ?>
