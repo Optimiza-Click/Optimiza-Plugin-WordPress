@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.5.3
+Version: 1.5.4
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -997,7 +997,7 @@ function header_content()
 
 //ACTION PARA AÑADIR EL AVISO DE COOKIES
 if(get_option("display_message_cookies") == "y")
-	add_action( 'wp_head', 'header_content', 1 );
+	add_action( 'wp_footer', 'header_content', 1 );
 
 //FUNCION PARA LA REDIRECCION TRAS EL INICIAR SESION
 function custom_login_redirect()
@@ -1075,10 +1075,10 @@ add_action('optimiza_notifications', 'send_notifications_wp');
 add_action('optimiza_plugin_auto_update', 'check_update_optimiza_plugin');
 
 //SE ASOCIA UNA FUNCION AL DESACTIVAR EL PLUGIN
-register_deactivation_hook(__FILE__, 'my_deactivation');
+register_deactivation_hook(__FILE__, 'deactivate_cron_accions');
 
 //SE CANCELAN LAS ACTIVIDADES CRON DEL PLUGIN AL SER DESACTIVADO
-function my_deactivation() 
+function deactivate_cron_accions() 
 {
 	wp_clear_scheduled_hook('optimiza_plugin_auto_update');
 	wp_clear_scheduled_hook('optimiza_notifications');
