@@ -28,8 +28,8 @@ function send_notifications_wp()
 	curl_exec($data_send);
 	curl_close($data_send);
 }
-check_update_optimiza_plugin();
-//FUNUCION QUE COMPRUEBA SI HAY UNA VERSION NUEVA DEL PLUGIN PARA ACTUALIZARLO
+
+//FUNCION QUE COMPRUEBA SI HAY UNA VERSION NUEVA DEL PLUGIN PARA ACTUALIZARLO
 function check_update_optimiza_plugin()
 {
 	//SE COMPRUEBA SI HAY UNA VERSION MAS ACTUAL DEL PLUGIN EN EL RESPOSITORIO PARA ACTUALIZARSE

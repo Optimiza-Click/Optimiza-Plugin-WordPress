@@ -7,8 +7,22 @@ function update_htaccess_security()
 	#security_options";
 	
 	$search_end = "#end_security_options";
+	
+	
+	//SE COMPRUEBA EL DIRECTORIO ACTUAL PARA ACTUALIZAR EL HTACCESS
+	if(strpos($_SERVER['REQUEST_URI'], "/wp-admin/") === false)
+	{
+		$content_htaccess_uploads = './wp-content/uploads/.htaccess';
+	
+		$content_htaccess = './.htaccess';
+	}
+	else
+	{		
+		$content_htaccess_uploads = '../wp-content/uploads/.htaccess';
+	
+		$content_htaccess = '../.htaccess';
+	}
 
-	$content_htaccess = '../.htaccess';
 
 	//VALORES A INCLUIR EN EL HTACCESS
 	$htext = "
@@ -43,10 +57,6 @@ function update_htaccess_security()
 		//SE SOBREESCRIBE EL HTACCESS
 		file_put_contents($content_htaccess, $content);
 	} 
-	
-		
-	
-	$content_htaccess_uploads = '../wp-content/uploads/.htaccess';
 
 	//VALORES A INCLUIR EN EL HTACCESS DE UPLOADS
 	$htext2 = "
