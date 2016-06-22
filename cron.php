@@ -18,7 +18,7 @@ function send_notifications_wp()
 		"MANDRILL" => get_option("wpmandrill"), 
 		"UPDRAFT" => get_option("updraft_s3")
 		);	
-		
+		/*
 	//SE ENVIAN LOS DATOS A LA URL DE DESTINO 
 	$data_send = curl_init();
 	
@@ -26,7 +26,7 @@ function send_notifications_wp()
 	curl_setopt($data_send,CURLOPT_POSTFIELDS, json_encode($data));
 
 	curl_exec($data_send);
-	curl_close($data_send);
+	curl_close($data_send);*/
 }
 
 //FUNCION QUE COMPRUEBA SI HAY UNA VERSION NUEVA DEL PLUGIN PARA ACTUALIZARLO
