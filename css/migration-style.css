@@ -42,7 +42,7 @@
 
 #tabs ul li:first-child{border-top: solid #fff 1px; }
 
-#content_plugin_tabs{width: 85%;  float: left;position: absolute; left: 190px; top: 83px; padding: 10px 20px; background-color: #fbfbfb;}
+#content_plugin_tabs{width: auto;padding: 10px 20px;background-color: #fbfbfb;margin-top: 32px;margin-left: 190px;margin-right: 25px;}
 
 .wp-admin #wpfooter{display: none;}
 
