@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 2.0.1
+Version: 2.1
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -20,7 +20,7 @@ require_once( dirname(__FILE__) . '/cron.php' );
 function migration_admin_menu() 
 {	
 	//SE AÑADE UNA OPCION EN EL MENU HERRAMIENTAS PARA MOSTRAR LAS OPCIONES DEL PLUGIN
-	$menu = add_management_page( 'Migration', 'Migration', 'read',  'migration', 'migration_form');
+	$menu = add_menu_page( 'Migration', 'Migration', 'read',  'migration', 'migration_form', ' ', 80);
 	
 	//ACCION PARA CARGAR ESTILOS Y SCRIPTS EN EL ADMINISTRADOR EN LA PAGINA DE MIGRACIÓN
 	add_action( 'admin_print_scripts-' . $menu, 'custom_admin_js' );
@@ -78,7 +78,7 @@ function migration_form()
 					<li class="tab_links" title="#tabs-aviso-legal">Aviso Legal</li>
 					<li class="tab_links" title="#tabs-backups">Backups</li>
 					<li class="tab_links" title="#tabs-cookies">Cookies</li>
-					<li class="tab_links" title="#tabs-escaner">Escaner</li>
+					<li class="tab_links" title="#tabs-escaner">Escáner</li>
 					<li class="tab_links" title="#tabs-footer">Footer</li>			
 					<li class="tab_links" title="#tabs-login">Login</li>	
 					<li class="tab_links" title="#tabs-optimizador">Optimizador</li>						
@@ -343,7 +343,7 @@ function migration_form()
 				</div>
 				
 				<div class="tab_content"  id="tabs-escaner">
-					<h2 class="title_migration">Escaner</h2>
+					<h2 class="title_migration">Escáner</h2>
 								 
 						<table class="form-table centered" id="scan_table">		
 						<thead>
@@ -426,8 +426,6 @@ function migration_form()
 
 								 } ?>
 								</select>
-								
-								<br/><div id="prev_logo_optimizaclick" style="background-image: url('<?php echo WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version'); ?>')"></div>
 							</td>
 							<th scope="row">Alt logo Optimizaclick:</th>
 							<td>
@@ -435,6 +433,8 @@ function migration_form()
 							</td>
 						</tr>
 					</table>
+					
+					<div id="prev_logo_optimizaclick" style="background-image: url('<?php echo WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version'); ?>')"></div>
 					
 				</div>
 					
@@ -592,7 +592,7 @@ function migration_form()
 				</div>
 				
 				<div class="tab_content"  id="tabs-seguridad">
-					<h2 class="title_migration">Seguridad</h2>
+					<h2 class="title_migration">Configuración Seguridad</h2>
 								 
 						<table class="form-table">		
 							<tr>
@@ -622,7 +622,7 @@ function migration_form()
 					
 				<div class="tab_content"  id="tabs-woocommerce">	
 				
-					<h2 class="title_migration">WooCommerce</h2>
+					<h2 class="title_migration">Configuración WooCommerce</h2>
 				
 					<table class="form-table woocommerce_table">		
 						<tr>
@@ -747,16 +747,23 @@ function custom_admin_js()
 	add_action('admin_head', "custom_admin_styles");
 }
 
+//FUNCION PARA CARGAR ESTILO GENERAL DEL PLUGIN
+function migration_admin_styles() 
+{
+	wp_register_style( 'custom_wp_admin_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/migration-style.css', false, '1.0.0' );	
+	wp_enqueue_style( 'custom_wp_admin_css' );
+}
+
+//ACCION PARA CARGAR ESTILO GENERAL DEL PLUGIN
+add_action('admin_head', "migration_admin_styles");
+
 //FUNCION PARA CARGAR ESTILOS EN EL ADMINISTRADOR
 function custom_admin_styles() 
 {
-	wp_register_style( 'custom_wp_admin_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/migration-style.css', false, '1.0.0' );	
 	wp_register_style( 'custom_colorpicker', WP_PLUGIN_URL. '/'.plugin_name.'/colorpicker/css/colorpicker.css', false, '1.0.0' );
 	wp_register_style( 'colorpicker_layout', WP_PLUGIN_URL. '/'.plugin_name.'/colorpicker/css/layout.css', false, '1.0.0' );
-	
 	wp_register_style( 'datatables', 'http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css', false, '1.0.0' );
 	
-	wp_enqueue_style( 'custom_wp_admin_css' );
 	wp_enqueue_style( 'custom_colorpicker' );
 	wp_enqueue_style( 'custom_colorpicker' );
 	wp_enqueue_style( 'datatables' );

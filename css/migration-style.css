@@ -1,3 +1,7 @@
+#toplevel_page_migration .wp-menu-image, #toplevel_page_migration .wp-not-current-submenu.toplevel_page_migration:hover .wp-menu-image{background: url("../img/icons/menu-icon.png") no-repeat 50% 30% !important; opacity: 1;}
+
+#toplevel_page_migration.wp-not-current-submenu .wp-menu-image{opacity: 0.7;}
+
 .title_migration{padding: 0px 20px; background-color: #01AFD6; color: #fff;line-height: 60px;}
 
 .title_migration span{margin-left: 12px;}
@@ -6,7 +10,7 @@
 
 .title_plugin img{right: 5px; top: 4px; position: relative;}
 
-#prev_logo_optimizaclick{background-repeat: no-repeat; margin-top: 8px;background-position: center; width: 190px; height: 50px; background-color: #cbcbcb}
+#prev_logo_optimizaclick{background-repeat: no-repeat; margin: 8px auto;background-position: center; width: 190px; height: 50px; background-color: #cbcbcb}
 
 .centered th, .centered td{text-align: center !important;}
 
@@ -20,9 +24,9 @@
 
 .state_bad{color: red;}
 
-#scan_table th, #scan_deleted_table th, #plugins_table th, #backups_table th{background-color: grey; color: white;padding: 18px 0px;}
+#scan_table th, #scan_deleted_table th, #plugins_table th, #backups_table th{background-color: #555555; color: white;padding: 18px 0px;}
 
-#scan_table td, #scan_table th, #scan_deleted_table td, #scan_deleted_table th, #plugins_table td, #plugins_table th, #backups_table td, #backups_table th{border: 1px solid grey;}
+#scan_table td, #scan_table th, #scan_deleted_table td, #scan_deleted_table th, #plugins_table td, #plugins_table th, #backups_table td, #backups_table th{border: 1px solid #555555;}
 
 #messages_plugin{background-color: #00B2DB; color: #fff; padding: 10px 25px;display: none;float: left; position: absolute; top: 18px;left:190px;}
 
