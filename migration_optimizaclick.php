@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 2.0
+Version: 2.0.1
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -84,7 +84,7 @@ function migration_form()
 					<li class="tab_links" title="#tabs-optimizador">Optimizador</li>						
 					<li class="tab_links" title="#tabs-plugins">Plugins</li>		
 					<li class="tab_links" title="#tabs-seguridad">Seguridad</li>	
-					<li class="tab_links" title="#tabs-woocommerce">Woocommerce</li>				
+					<li class="tab_links" title="#tabs-woocommerce">WooCommerce</li>				
 					
 				</ul>
 				
@@ -567,8 +567,8 @@ function migration_form()
 								"Contact Form 7" => array( "slug" => "contact-form-7", "url" => "https://downloads.wordpress.org/plugin/contact-form-7.4.4.2.zip"),
 								"Insert Codes Plugin" => array( "slug" => "insert-codes-plugin-master", "url" => "https://github.com/Optimiza-Click/insert-codes-plugin/archive/master.zip"),			
 								"Updraft Plus" => array( "slug" => "updraftplus", "url" => "https://downloads.wordpress.org/plugin/updraftplus.1.12.12.zip"),
-								"WP Migrate DB" => array("slug" => "wp-migrate-db", "url" => "https://downloads.wordpress.org/plugin/wp-migrate-db.0.8.zip"),
 								"WP Mandrill" => array( "slug" => "wpmandrill", "url" => "https://downloads.wordpress.org/plugin/wpmandrill.zip"),
+								"WP Migrate DB" => array("slug" => "wp-migrate-db", "url" => "https://downloads.wordpress.org/plugin/wp-migrate-db.0.8.zip"),
 								"WP Plugin Tutoriales" => array( "slug" => "Lifeguard---OptimizaClick-master", "url" => "https://github.com/david1311/Lifeguard---OptimizaClick/archive/master.zip")
 								);
 									
@@ -622,7 +622,7 @@ function migration_form()
 					
 				<div class="tab_content"  id="tabs-woocommerce">	
 				
-					<h2 class="title_migration">Woocommerce</h2>
+					<h2 class="title_migration">WooCommerce</h2>
 				
 					<table class="form-table woocommerce_table">		
 						<tr>

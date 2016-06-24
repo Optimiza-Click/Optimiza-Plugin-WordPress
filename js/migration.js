@@ -304,6 +304,13 @@
 		
 		jQuery(this).addClass("selected_tab");
 	});
-	
-
+		
+	//FUNCION PARA CARGAR LAS DIMENSIONES DE LA IMAGEN DEL LOGO DE LOGIN
+	jQuery('#load_dimensions_logo').click(function() 
+	{
+		var img = new Image();
+		img.src = jQuery('#url_logo_image').val();
+		jQuery('#height_login_image').val(img.height);
+		jQuery('#width_login_image').val(img.width);
+    });
 }); 

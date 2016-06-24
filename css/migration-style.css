@@ -4,6 +4,8 @@
 
 .title_plugin {text-align: right;margin-right: 50px;}
 
+.title_plugin img{right: 5px; top: 4px; position: relative;}
+
 #prev_logo_optimizaclick{background-repeat: no-repeat; margin-top: 8px;background-position: center; width: 190px; height: 50px; background-color: #cbcbcb}
 
 .centered th, .centered td{text-align: center !important;}
@@ -36,7 +38,7 @@
 
 #tabs ul li:first-child{border-top: solid #fff 1px; }
 
-#content_plugin_tabs{width: 85%;  float: left;position: absolute; left: 190px; top: 82px; padding: 10px 20px; background-color: #fbfbfb;}
+#content_plugin_tabs{width: 85%;  float: left;position: absolute; left: 190px; top: 83px; padding: 10px 20px; background-color: #fbfbfb;}
 
 .wp-admin #wpfooter{display: none;}
 
