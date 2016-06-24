@@ -58,7 +58,7 @@ if(isset($_REQUEST['scan_files']))
 	foreach($value as $file)
 	{
 		echo "<tr><td>".substr($file, 9)." </td><td> ".date('Y/m/d - H:i:s', filemtime($file))." </td><td> ".filesize($file)."</td>";
-		echo "<td>".decoct(fileperms($file) & 0777)."</td><td>".scan_file($file)."</td></tr>";
+		echo "<td>".decoct(fileperms($file) & 0777)."</td></tr>";
 	}
 	
 	echo "</tbody";
@@ -78,81 +78,6 @@ function rglob($pattern, $flags = 0)
 	}
 	
 	return $files;
-}
-
-//Funcion que lee el conteido de un fichero para comprobar si esta infectado
-function scan_file($file)
-{
-	$message = "";
-	$result= "";
-		
-	//ARRAYS CON LOS VALORES A BUSCAR
-	$infected_values = array('/[\'\"\$\\ \/]*?([a-zA-Z0-9]{' .strlen(base64_encode('sergej + swetlana = love.')). ',})/', " ?><?php @error_reporting(0)");
-	
-	$suspect_values = array('?><?php', 'eval(', '/get_option\s*\(\s*[\'"](.*?)[\'"]\s*\)/', 'eval(base64_decode', "GLOBALS[");
-	
-	$infected_names = array("file.php", "init.php", "css.php", "folder.php", "sytem.php");
-	
-	//Se buscan cadenas de caracteres sospechosas
-	foreach(file($file) as $fli=>$fl)
-	{
-		foreach($suspect_values as $value)
-		{
-			if(strpos($fl, $value)!==false)
-			{
-				$message .= "<br/>". $filename . ' linea ' . ($fli+1);
-				
-				$result = 2;
-			}
-		}
-	}	
-	
-	//Se buscan cadenas de caracteres seguramente infectadas
-	foreach(file($file) as $fli=>$fl)
-	{
-		foreach($infected_values as $value)
-		{
-			if(strpos($fl, $value)!==false)
-			{
-				$message .= "<br/>". $filename . ' linea ' . ($fli+1);
-				
-				$result = 1;
-			}
-		}
-	}
-	
-	//Se comprueban los nombres de los ficheros comunes de estar infectados
-	foreach($infected_names as $value)
-	{
-		if(strpos($file, $value)!==false)
-			$result = 1;
-	}
-	
-	if(strpos($file, "scan.php")!==false)
-		$result = "";
-	
-	//SE DEVUELVE EL RESULTADO CORRESPONDIENTE
-	switch ($result)
-	{
-		case 1:
-		
-			return "<span class='state_bad'>Infectado".$message."</span>";
-			
-			break;
-			
-		case 2:
-		
-			return "<span class='state_suspect'>Sospechoso".$message."</span>";
-			
-			break;
-		
-		default:
-		
-			return "<span class='state_ok'>Sin Virus</span>";
-			
-			break;
-	}
-	
 }
 
 //FUNCION QUE CAMBIA LOS PERMISOS DE LOS DIRECTORIOS Y FICHEROS

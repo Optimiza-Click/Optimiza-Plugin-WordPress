@@ -56,7 +56,7 @@ function create_page($title, $slug, $type)
 	{
 		wp_insert_post($post);  
 		
-		echo "Página creada correctamente." ;
+		echo "Página creada correctamente. " ;
 	}
 	else 
 	{
@@ -64,7 +64,7 @@ function create_page($title, $slug, $type)
 		
 		wp_update_post( $post );
 		
-		echo 'La página "'.$title.'" se actualizó correctamente.<br/>';
+		echo 'Página actualizada. ';
 	}
 }
 

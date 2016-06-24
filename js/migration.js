@@ -3,6 +3,8 @@
 	//BOTON PARA CREAR PAGINA DE AVISO LEGAL
 	jQuery("#button_aviso_legal_page").click(function()
 	{	
+		jQuery("#load_div").addClass("loading");
+		
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "pages.php", 
 			  method: "POST",
@@ -13,14 +15,17 @@
 			 
 		request.done(function( msg ) 
 		{		
+			jQuery("#load_div").removeClass("loading");
+			
 			view_messages(msg);
-
 		});
 	});
 	
 	//BOTON PARA CREAR PAGINAS DE COOKIES
 	jQuery("#button_cookies_pages").click(function()
 	{	
+		jQuery("#load_div").addClass("loading");
+		
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "pages.php", 
 			  method: "POST",
@@ -30,8 +35,9 @@
 			 
 		request.done(function( msg ) 
 		{		
+			jQuery("#load_div").removeClass("loading");
+			
 			view_messages(msg);
-
 		});
 	});
 	
@@ -41,6 +47,8 @@
 	{	
 		var boton =  jQuery(this);
 	
+		jQuery("#load_div").addClass("loading");
+		
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "zips.php", 
 			  method: "POST",
@@ -49,6 +57,8 @@
 			 
 		request.done(function( msg ) 
 		{		
+			jQuery("#load_div").removeClass("loading");
+			
 			if(msg == "ok")
 			{
 				view_messages("Plugin instalado correctamente.")
@@ -67,6 +77,8 @@
 	//BOTON PARA CAMBIAR LOS PERMISOS DE LOS FICHEROS
 	jQuery("#button_permissions_files").click(function()
 	{	
+		jQuery("#load_div").addClass("loading");
+		
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "scan.php", 
 			  method: "POST",
@@ -75,14 +87,17 @@
 			 
 		request.done(function( msg ) 
 		{		
+			jQuery("#load_div").removeClass("loading");
+			
 			view_messages(msg);
-
 		});
 	});
 		
 	//BOTON PARA GENERAR UN BACKUP DE LOS FICHEROS
 	jQuery("#button_generate_backup").click(function()
 	{	
+		jQuery("#load_div").addClass("loading");
+		
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "zips.php", 
 			  method: "POST",
@@ -92,13 +107,15 @@
 			 
 		request.done(function( msg ) 
 		{		
+			jQuery("#load_div").removeClass("loading");
+			
 			view_messages(msg["message"]);
+			
 			jQuery("#backups_table").append(msg["result"]);
 			
 			jQuery(".delete_backups").unbind();
 			
 			delele_backups_buttons();
-			
 		});
 	});
 
@@ -112,6 +129,8 @@
 			{
 				var boton =  jQuery(this);
 			
+				jQuery("#load_div").addClass("loading");
+				
 				var request = jQuery.ajax({
 					  url: jQuery( "#url_base").val() + "zips.php", 
 					  method: "POST",
@@ -120,6 +139,8 @@
 					 
 				request.done(function( msg ) 
 				{		
+					jQuery("#load_div").removeClass("loading");
+					
 					boton.parent().parent().css("display","none");
 				});
 			}
@@ -131,6 +152,8 @@
 	//BOTON PARA ESCANEAR LOS FICHEROS DE LA WEB
 	jQuery("#button_scan_files").click(function()
 	{	
+		jQuery("#load_div").addClass("loading");
+		
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "scan.php", 
 			  method: "POST",
@@ -138,11 +161,11 @@
 		});
 			 
 		request.done(function( content ) 
-		{		
-							
-			jQuery('#scan_table thead').after(content);
+		{						
+			jQuery("#load_div").removeClass("loading");
 			
-				
+			jQuery('#scan_table thead').after(content);
+							
 			jQuery("#scan_table").DataTable( 
 			{
 				columnDefs: [ {
@@ -161,7 +184,7 @@
 					targets: [ 1 ],
 					orderData: [ 1, 0 ]
 				}],
-				paging:         false
+				paging: false
 			} );
 		});
 	});
@@ -170,6 +193,8 @@
 	//BOTON PARA ESCANEAR LOS FICHEROS INNECESARIOS (.TXT Y .HTML)DE LA WEB
 	jQuery("#button_scan_deleted_files").click(function()
 	{	
+		jQuery("#load_div").addClass("loading");
+		
 		var request = jQuery.ajax({
 			  url: jQuery( "#url_base").val() + "scan.php", 
 			  method: "POST",
@@ -178,6 +203,8 @@
 			 
 		request.done(function( content ) 
 		{					
+			jQuery("#load_div").removeClass("loading");
+			
 			jQuery('#scan_deleted_table thead').after(content);		
 				
 			jQuery("#scan_deleted_table").DataTable( 
@@ -198,7 +225,7 @@
 					targets: [ 1 ],
 					orderData: [ 1, 0 ]
 				}],
-				paging:         false
+				paging: false
 			} );
 		});
 	});
@@ -208,6 +235,8 @@
 	{	
 		if(confirm("¿Estas seguro?"))
 		{
+			jQuery("#load_div").addClass("loading");
+			
 			var request = jQuery.ajax({
 				  url: jQuery( "#url_base").val() + "scan.php", 
 				  method: "POST",
@@ -216,17 +245,15 @@
 				 
 			request.done(function( content ) 
 			{					
+				jQuery("#load_div").removeClass("loading");
+				
 				jQuery('#scan_deleted_table tbody').empty();	
 
-				view_messages("Ficheros eliminados correctamente");		
-
-				jQuery("#scan_deleted_table").destroy();				
+				view_messages("Ficheros eliminados correctamente");					
 			});
 		}
 	});
-	
-	jQuery("#tabs").tabs();
-	
+		
 	//SE ASOCIADA EL COLOR PICKER A TODOS LOS INPUT DE TIPO COLOR
 	jQuery('input[type=color]').each(function(){
 		
@@ -250,19 +277,33 @@
 		
 	});
 	
+	//FUNCION PARA MOSTRAR LA VERSION DEL LOGOTIPO DE OPTIMIZACLICK EN EL FOOTER
 	jQuery("#optimiza_logo_version").change(function(){
 		
 		jQuery("#prev_logo_optimizaclick").css("background-image", 'url("../wp-content/plugins/Optimiza-Plugin-WordPress-master/img/' + jQuery("#optimiza_logo_version").val() + '")');
 		
 	});
 	
+	//FUNCION PARA MOSTRAR LOS MENSAJES DE LA PAGINA DEL PLUGIN
 	function view_messages(msg)
 	{
 		jQuery("#messages_plugin").empty();
 		jQuery("#messages_plugin").html(msg);
 		jQuery("#messages_plugin").fadeIn(200);
-		jQuery("#messages_plugin").fadeOut(8000);
+		jQuery("#messages_plugin").fadeOut(5000);
 	}
+	
+	//FUNCION PARA MOSTAR EL CONTENIDO EN PESTAÑAS	
+	jQuery(".tab_links").click(function()
+	{	
+		jQuery(".tab_content").css("display", "none");
+		
+		jQuery(jQuery(this).attr("title")).css("display", "block");
+		
+		jQuery(".tab_links").removeClass("selected_tab");
+		
+		jQuery(this).addClass("selected_tab");
+	});
 	
 
 }); 

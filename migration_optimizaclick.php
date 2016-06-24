@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 1.5.7
+Version: 2.0
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -20,7 +20,7 @@ require_once( dirname(__FILE__) . '/cron.php' );
 function migration_admin_menu() 
 {	
 	//SE AÑADE UNA OPCION EN EL MENU HERRAMIENTAS PARA MOSTRAR LAS OPCIONES DEL PLUGIN
-	$menu = add_management_page( 'Migración', 'Migración', 'read',  'migracion', 'migration_form');
+	$menu = add_management_page( 'Migration', 'Migration', 'read',  'migration', 'migration_form');
 	
 	//ACCION PARA CARGAR ESTILOS Y SCRIPTS EN EL ADMINISTRADOR EN LA PAGINA DE MIGRACIÓN
 	add_action( 'admin_print_scripts-' . $menu, 'custom_admin_js' );
@@ -54,33 +54,307 @@ add_action( 'admin_menu', 'migration_admin_menu' );
 //FUNCION PARA MOSTRAR LAS OPCIONES DEL PLUGIN
 function migration_form()
 {
-?><div class="wrap">
+?><div class="wrap_migration">
 
-		<h1 class="title_plugin"><span>Optimizaclick Migration Plugin</span></h1>
-				
+		<div id="load_div" class="dashicons dashicons-update"></div>
+
 		<form method="post" action="options.php">
+		
+			<?php submit_button(); ?>
+			
+			<h1 class="title_plugin"><img src="<?php echo "../wp-content/plugins/".plugin_name."/img/icons/icon.png" ?>" alt="Icono Optimizaclick" /> <span> Migration Plugin</span></h1>
+				
+			
 				
 		<?php settings_fields( 'migration_optimizaclick_options' ); ?>
 		<?php do_settings_sections( 'migration_optimizaclick_options' ); ?>		
 		
-			<div id="tabs">
+			<div id="messages_plugin"></div>
 			
+			<div id="tabs">
+								
 				<ul>
-					<li><a href="#tabs-actualizaciones">Actualizaciones</a></li>
-					<li><a href="#tabs-aviso-legal">Aviso Legal</a></li>
-					<li><a href="#tabs-backups">Backups</a></li>
-					<li><a href="#tabs-cookies">Cookies</a></li>
-					<li><a href="#tabs-escaner">Escaner</a></li>
-					<li><a href="#tabs-footer">Footer</a></li>			
-					<li><a href="#tabs-login">Login</a></li>	
-					<li><a href="#tabs-optimizador">Optimizador</a></li>						
-					<li><a href="#tabs-plugins">Plugins</a></li>		
-					<li><a href="#tabs-seguridad">Seguridad</a></li>	
-					<li><a href="#tabs-woocommerce">Woocommerce</a></li>				
+					<li class="tab_links" title="#tabs-actualizaciones">Actualizaciones</li>
+					<li class="tab_links" title="#tabs-aviso-legal">Aviso Legal</li>
+					<li class="tab_links" title="#tabs-backups">Backups</li>
+					<li class="tab_links" title="#tabs-cookies">Cookies</li>
+					<li class="tab_links" title="#tabs-escaner">Escaner</li>
+					<li class="tab_links" title="#tabs-footer">Footer</li>			
+					<li class="tab_links" title="#tabs-login">Login</li>	
+					<li class="tab_links" title="#tabs-optimizador">Optimizador</li>						
+					<li class="tab_links" title="#tabs-plugins">Plugins</li>		
+					<li class="tab_links" title="#tabs-seguridad">Seguridad</li>	
+					<li class="tab_links" title="#tabs-woocommerce">Woocommerce</li>				
 					
 				</ul>
+				
+			</div>
+			
+			<div id="content_plugin_tabs">
+			
+				<div class="tab_content"  id="tabs-actualizaciones">
+					
+					<h2 class="title_migration">Configuración Actualizaciones</h2>
+					
+					
+					<table class="form-table">
+						<tr>
+							<th scope="row">Notificaciones del núcleo:</th>
+							<td>
+								<select name="updates_core">
+									<option <?php if("y" == get_option( 'updates_core' )) echo "selected"; ?> value="y">Si</option>
+									<option <?php if("n" == get_option( 'updates_core' )) echo "selected"; ?> value="n">No</option>
+								</select>
+							</td>
+							<th scope="row">Notificaciones de plugins:</th>
+							<td>
+								<select name="updates_plugins">
+									<option <?php if("y" == get_option( 'updates_plugins' )) echo "selected"; ?> value="y">Si</option>
+									<option <?php if("n" == get_option( 'updates_plugins' )) echo "selected"; ?> value="n">No</option>
+								</select>
+							</td>
+							<th scope="row">Notificaciones de temas:</th>
+							<td>
+								<select name="updates_themes">
+									<option <?php if("y" == get_option( 'updates_themes' )) echo "selected"; ?> value="y">Si</option>
+									<option <?php if("n" == get_option( 'updates_themes' )) echo "selected"; ?> value="n">No</option>
+								</select>
+							</td>
+							
+						</tr>
+					</table>
+					
+				</div>
 			  
-				<div id="tabs-footer">
+				<div class="tab_content"  id="tabs-aviso-legal">
+					
+					<h2 class="title_migration">Configuración Aviso Legal</h2>
+					
+					<table class="form-table">
+						<tr>
+							<th scope="row">Titulo página aviso legal:</th>
+							<td>
+								<input type="text" name="title_aviso_legal" id="title_aviso_legal"  value="<?php echo get_option( 'title_aviso_legal' ); ?>"/>
+							</td>
+							<th scope="row">Etiqueta aviso legal:</th>
+							<td>
+								<input type="text" name="slug_aviso_legal" id="slug_aviso_legal" value="<?php echo get_option( 'slug_aviso_legal' ); ?>"/>
+							</td>
+						</tr>
+						<tr>		
+							<th scope="row">Nombre empresa:</th>
+							<td>
+								<input type="text" name="name_empresa" id="name_empresa" value="<?php echo get_option( 'name_empresa' ); ?>"/>
+							</td>
+							<th scope="row">Dirección empresa:</th>
+							<td>
+								<input type="text" name="address_empresa" id="address_empresa" value="<?php if(get_option( 'address_empresa' ) == "") echo 'con domicilio social en ';  echo get_option( 'address_empresa' ); ?>"/>
+							</td>
+						</tr>
+						<tr>				
+							<th scope="row">CIF empresa:</th>
+							<td>
+								<input type="text" name="cif_empresa" id="cif_empresa" value="<?php  if(get_option( 'cif_empresa' ) == "") echo 'con CIF nº ';   echo get_option( 'cif_empresa' ); ?>"/>
+							</td>
+							<th scope="row">Registro mercantil empresa:</th>
+							<td>
+								<input type="text" name="register_empresa" id="register_empresa" value="<?php if(get_option( 'register_empresa' ) == "") echo 'e inscrita en el Registro Mercantil ';  echo get_option( 'register_empresa' ); ?>"/>
+							</td>
+						</tr>
+						<tr>		
+							<th scope="row">Dominio empresa:</th>
+							<td>
+								<input type="text" name="domain_empresa" id="domain_empresa" value="<?php echo get_option( 'domain_empresa' ); ?>"/>
+							</td>
+							<th scope="row">E-mail empresa:</th>
+							<td>
+								<input type="text" name="email_empresa" id="email_empresa" value="<?php echo get_option( 'email_empresa' ); ?>"/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">	
+								<input type="button" class="button button-primary" value="Crear página de aviso legal" id="button_aviso_legal_page" />
+							</th>
+						</tr>
+					</table>
+					
+				</div>
+				
+				<div class="tab_content"  id="tabs-backups">
+					<h2 class="title_migration">Backups</h2>
+					
+					<table class="form-table centered" id="backups_table">		
+						<thead>
+						<tr><th>Nombre</th><th>Fecha de creación</th><th>Tamaño (MB)</th><th></th></tr></thead>
+						<tbody>
+						
+						<?php
+					
+							$dir = "../wp-content/plugins/".plugin_name."/backups/";
+
+							if ($dh = scandir($dir, SCANDIR_SORT_ASCENDING)) 
+							{
+								foreach ($dh as $file) 
+								{
+									if($file != "." && $file != "..")
+									{
+										echo "<tr><td>".$file." </td><td> ".date('Y/m/d - H:i:s', filemtime($dir.$file))." </td><td> ".substr((filesize($dir.$file)/1000000), 0, -4)."</td>
+										<td><a class='button button-primary' href='".$dir.$file."'>Descargar</a>&nbsp; <a id='del_".$file."' class='button button-primary delete_backups'>Eliminar</a></td></tr>";
+									}
+								}		
+							}
+						
+						?>
+												
+						</tbody>						
+						</table>
+
+						<div id="content_backups"></div>
+						<table class="form-table centered" >
+							<tr>
+								<th scope="row">Generar backup:</th>
+									<td>
+										<select id="generate_backup_url">
+											<option value="db">Base de datos</option>							
+											<option value="../">Plugins</option>
+											<option value="../../themes/">Temas</option>
+											<option value="../../uploads/">Uploads</option>
+											<option value="../../../">Wordpress (ficheros)</option>
+											<option value="../../">WP-content</option>
+										</select>
+									</td>
+								</th>
+								
+								<td>
+									<input type="text" id="url_old_wordpress" value="<?php echo get_home_url(); ?>"/>
+								</td>
+								<td>
+									<input type="text" id="url_new_wordpress" placeholder="URL final" />
+								</td>
+								<td>
+									<input type="button" class="button button-primary" value="Crear copia de seguridad" id="button_generate_backup" />
+								</td>
+							</tr>
+						</table>
+				</div>
+				
+				<div class="tab_content"  id="tabs-cookies">
+					
+					<h2 class="title_migration">Configuración Cookies</h2>
+							 
+					<table class="form-table">		
+						<tr>
+							<th scope="row">Mostrar mensaje:</th>
+							<td>
+								<select name="display_message_cookies">
+									<option <?php if("y" == get_option( 'display_message_cookies' )) echo "selected"; ?> value="y">Si</option>
+									<option <?php if("n" == get_option( 'display_message_cookies' )) echo "selected"; ?> value="n">No</option>
+								</select>
+							</td>
+							<th scope="row">Ubicación del mensaje:</th>
+							<td>
+								<select name="position_cookies">
+									<option <?php if("bottom" == get_option( 'position_cookies' )) echo "selected"; ?> value="bottom">Abajo</option>
+									<option <?php if("top" == get_option( 'position_cookies' )) echo "selected"; ?> value="top">Arriba</option>
+								</select>
+							</td>
+							<th scope="row">Ocultar mensaje:</th>
+							<td>
+								<select name="hide_cookies">
+									<option <?php if("aceptar" == get_option( 'hide_cookies' )) echo "selected"; ?> value="aceptar">Botón Aceptar</option>
+									<option <?php if("auto" == get_option( 'hide_cookies' )) echo "selected"; ?> value="auto">Automáticamente</option>
+								</select>
+							</td>
+							
+						</tr>
+						</table>
+						<table class="form-table">		
+						
+						<tr>			
+							<th scope="row">Texto button cookies:</th>
+							<td>
+								<input type="text" name="text_button_cookies" value="<?php if(get_option( 'text_button_cookies' ) == "") echo 'Aceptar'; else echo get_option( 'text_button_cookies' ); ?>"/>
+							</td>
+							
+							<th scope="row">Texto enlace cookies:</th>
+							<td colspan="3">
+								<input type="text" name="link_text_cookies" style="width: 100%;" value="<?php if(get_option( 'link_text_cookies' ) != "") echo get_option( 'link_text_cookies' ); else echo "condiciones de uso."; ?>" />
+							</th>
+							
+						</tr>
+						<tr>
+							<th scope="row">Mensaje cookies:</th>
+							<td colspan="5">
+								<input type="text" name="text_message_cookies" style="width: 100%;" value="<?php if(get_option( 'text_message_cookies' ) != "") echo get_option( 'text_message_cookies' ); else echo "Esta web utiliza cookies. Si sigues navegando entendemos que aceptas las"; ?>" />
+							</th>
+						</tr>
+					</table>
+					
+					<table class="form-table">	
+						<tr>
+							<th scope="row">Background color:</th>
+							<td>
+								<input type="color" name="background_color_cookies" value="<?php if(get_option( 'background_color_cookies' ) == "") echo '#ffffff'; else echo get_option( 'background_color_cookies' ); ?>"/>
+							</td>
+							<th scope="row">Font color:</th>
+							<td>
+								<input type="color" name="font_color_cookies" value="<?php if(get_option( 'font_color_cookies' ) == "") echo '#000000'; else echo get_option( 'font_color_cookies' ); ?>"/>
+							</td>
+							<th scope="row">Background color button:</th>
+							<td>
+								<input type="color" name="background_button_cookies" value="<?php if(get_option( 'background_button_cookies' ) == "") echo '#000000'; else echo get_option( 'background_button_cookies' ); ?>"/>
+							</td>
+							<th scope="row">Font color button:</th>
+							<td>
+								<input type="color" name="font_color_button_cookies" value="<?php if(get_option( 'font_color_button_cookies' ) == "") echo '#ffffff'; else echo get_option( 'font_color_button_cookies' ); ?>"/>
+							</td>																			
+						</tr>
+					</table>
+					
+					<table class="form-table">					
+						<tr>
+							<th scope="row">Titulo política cookies:</th>
+							<td>
+								<input type="text" name="title_politica_cookies" id="title_politica_cookies"  value="<?php if(get_option( 'title_politica_cookies')  == "") echo "Política de Cookies"; else echo get_option( 'title_politica_cookies' ); ?>"/>
+							</td>
+							<th scope="row">Slug política cookies:</th>
+							<td>
+								<input type="text" name="slug_politica_cookies" id="slug_politica_cookies" value="<?php if(get_option( 'slug_politica_cookies')  == "") echo "politica-cookies"; else echo get_option( 'slug_politica_cookies' ); ?>"/>
+							</td>
+						</tr>
+												
+						<tr>
+							<th scope="row">Titulo información cookies:</th>
+							<td>
+								<input type="text" name="title_mas_informacion" id="title_mas_informacion" value="<?php if(get_option( 'title_mas_informacion')  == "") echo "Más información sobre las Cookies"; else echo get_option( 'title_mas_informacion' ); ?>"/>
+							</td>
+							<th scope="row">Slug información cookies:</th>
+							<td>
+								<input type="text" name="slug_mas_informacion" id="slug_mas_informacion" value="<?php if(get_option( 'slug_mas_informacion')  == "") echo "informacion-cookies"; else echo get_option( 'slug_mas_informacion' ); ?>"/>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">	
+								<input type="button" class="button button-primary" value="Crear páginas sobre las cookies" id="button_cookies_pages" />
+							</th>
+						</tr>
+					</table>
+					
+				</div>
+				
+				<div class="tab_content"  id="tabs-escaner">
+					<h2 class="title_migration">Escaner</h2>
+								 
+						<table class="form-table centered" id="scan_table">		
+						<thead>
+						<tr><th>Nombre fichero</th><th>Fecha modificación</th><th>Tamaño (bytes)</th><th>Permisos</th></tr></thead>
+												
+						</table>
+						
+						<p><input type="button" class="button button-primary" value="Escanear ficheros" id="button_scan_files" /></p>
+				</div>
+				
+				<div class="tab_content"  id="tabs-footer">
 						
 					<h2 class="title_migration">Configuración Footer</h2>
 					
@@ -108,10 +382,7 @@ function migration_form()
 
 								</select>
 							</td>
-							<th scope="row">Footer width:</th>
-							<td>
-								<input type="text" name="footer_width" value="<?php if(get_option( 'footer_width' ) != "") echo get_option( 'footer_width' ); else echo "100%"; ?>"/>
-							</td>					
+											
 						</tr>
 						<tr>
 							<th scope="row">Background footer:</th>
@@ -122,6 +393,10 @@ function migration_form()
 							<td>
 								<input type="color" name="footer_font_color" value="<?php if(get_option( 'footer_font_color' ) != "") echo get_option( 'footer_font_color' ); else echo "#ffffff" ?>"/>
 							</td>
+							<th scope="row">Footer width:</th>
+							<td>
+								<input type="text" name="footer_width" value="<?php if(get_option( 'footer_width' ) != "") echo get_option( 'footer_width' ); else echo "100%"; ?>"/>
+							</td>	
 						</tr>
 						<tr>
 							<th scope="row">Mostrar logo Optimizaclick:</th>
@@ -140,7 +415,7 @@ function migration_form()
 									
 									foreach ($directorios as $nombre_fichero)
 									{				
-										if($nombre_fichero != "." && $nombre_fichero != "..")
+										if($nombre_fichero != "." && $nombre_fichero != ".." && $nombre_fichero != "icons")
 										{
 											echo '<option ';  
 											
@@ -162,58 +437,8 @@ function migration_form()
 					</table>
 					
 				</div>
-			
-				<div id="tabs-aviso-legal">
 					
-					<h2 class="title_migration">Configuración Aviso Legal</h2>
-					
-					<table class="form-table">
-						<tr>
-							<th scope="row">Titulo página aviso legal:</th>
-							<td>
-								<input type="text" name="title_aviso_legal" id="title_aviso_legal"  value="<?php echo get_option( 'title_aviso_legal' ); ?>"/>
-							</td>
-							<th scope="row">Etiqueta aviso legal:</th>
-							<td>
-								<input type="text" name="slug_aviso_legal" id="slug_aviso_legal" value="<?php echo get_option( 'slug_aviso_legal' ); ?>"/>
-							</td>
-							<th scope="row">Nombre empresa:</th>
-							<td>
-								<input type="text" name="name_empresa" id="name_empresa" value="<?php echo get_option( 'name_empresa' ); ?>"/>
-							</td>
-							<th scope="row">Dirección empresa:</th>
-							<td>
-								<input type="text" name="address_empresa" id="address_empresa" value="<?php if(get_option( 'address_empresa' ) == "") echo 'con domicilio social en ';  echo get_option( 'address_empresa' ); ?>"/>
-							</td>
-						</tr>
-						<tr valign="top">				
-							<th scope="row">CIF empresa:</th>
-							<td>
-								<input type="text" name="cif_empresa" id="cif_empresa" value="<?php  if(get_option( 'cif_empresa' ) == "") echo 'con CIF nº ';   echo get_option( 'cif_empresa' ); ?>"/>
-							</td>
-							<th scope="row">Registro mercantil empresa:</th>
-							<td>
-								<input type="text" name="register_empresa" id="register_empresa" value="<?php if(get_option( 'register_empresa' ) == "") echo 'e inscrita en el Registro Mercantil ';  echo get_option( 'register_empresa' ); ?>"/>
-							</td>
-							<th scope="row">Dominio empresa:</th>
-							<td>
-								<input type="text" name="domain_empresa" id="domain_empresa" value="<?php echo get_option( 'domain_empresa' ); ?>"/>
-							</td>
-							<th scope="row">E-mail empresa:</th>
-							<td>
-								<input type="text" name="email_empresa" id="email_empresa" value="<?php echo get_option( 'email_empresa' ); ?>"/>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">	
-								<input type="button" class="button button-primary" value="Crear página de aviso legal" id="button_aviso_legal_page" />
-							</th>
-						</tr>
-					</table>
-					
-				</div>
-			
-				<div id="tabs-login">
+				<div class="tab_content"  id="tabs-login">
 				
 					<h2 class="title_migration">Configuración Login</h2>
 					
@@ -226,15 +451,15 @@ function migration_form()
 									<option <?php if("y" == get_option( 'enable_login_styles' )) echo "selected"; ?> value="y">Si</option>
 								</select>
 							</td>
+						</tr>
+						<tr>
 							<th scope="row">URL logo login:</th>
 							<td colspan="2">
 								<input type="text" name="url_logo_image" id="url_logo_image"  value="<?php echo get_option( 'url_logo_image' ); ?>"/>
-								<input id="url_login_logo_button" class="button button-primary" type="button" value="Seleccionar imagen" />
 							</td>
 							<th scope="row">URL background login:</th>
 							<td colspan="2">
 								<input type="text" name="url_login_image" id="url_login_image"  value="<?php echo get_option( 'url_login_image' ); ?>"/>
-								<input id="url_login_image_button" class="button button-primary" type="button" value="Seleccionar imagen" />
 							</td>
 							
 						<tr valign="top">	
@@ -243,12 +468,16 @@ function migration_form()
 								<input type="number" name="height_login_image" id="height_login_image"  value="<?php echo get_option( 'height_login_image' ); ?>"/>	
 							</td>
 							<th scope="row">Anchura logo login (px):</th>
-							<td colspan="2">
+							<td>
 								<input type="number" name="width_login_image" id="width_login_image"  value="<?php echo get_option( 'width_login_image' ); ?>"/>
+							</td>
+							<td>
 								<input id="load_dimensions_logo" class="button button-primary" type="button" value="Cargar dimensiones" />	
 							</td>
 						</tr>	
 						</tr>
+						</table>
+						<table class="form-table">
 						<tr>
 							<th scope="row">Background color:</th>
 							<td>
@@ -283,9 +512,11 @@ function migration_form()
 								</select>
 							</td>
 							<th scope="row">URL redirección login:</th>
-							<td>
+							<td colspan="3">
 								<input type="text" name="url_login_redirect" value="<?php echo get_option( 'url_login_redirect' ); ?>"/>
 							</td>
+						</tr>
+						<tr>
 							<th scope="row">Habilitar redirección logout:</th>
 							<td>
 								<select name="enable_logout_redirect">								
@@ -294,7 +525,7 @@ function migration_form()
 								</select>
 							</td>
 							<th scope="row">URL redirección logout:</th>
-							<td>
+							<td colspan="3">
 								<input type="text" name="url_logout_redirect" value="<?php echo get_option( 'url_logout_redirect' ); ?>"/>
 							</td>
 						</tr>
@@ -302,175 +533,8 @@ function migration_form()
 					</table>
 				
 				</div>
-			
-				<div id="tabs-actualizaciones">
-					
-					<h2 class="title_migration">Configuración Actualizaciones</h2>
-					
-					
-					<table class="form-table">
-						<tr>
-							<th scope="row">Notificaciones del núcleo:</th>
-							<td>
-								<select name="updates_core">
-									<option <?php if("y" == get_option( 'updates_core' )) echo "selected"; ?> value="y">Si</option>
-									<option <?php if("n" == get_option( 'updates_core' )) echo "selected"; ?> value="n">No</option>
-								</select>
-							</td>
-							<th scope="row">Notificaciones de plugins:</th>
-							<td>
-								<select name="updates_plugins">
-									<option <?php if("y" == get_option( 'updates_plugins' )) echo "selected"; ?> value="y">Si</option>
-									<option <?php if("n" == get_option( 'updates_plugins' )) echo "selected"; ?> value="n">No</option>
-								</select>
-							</td>
-							<th scope="row">Notificaciones de temas:</th>
-							<td>
-								<select name="updates_themes">
-									<option <?php if("y" == get_option( 'updates_themes' )) echo "selected"; ?> value="y">Si</option>
-									<option <?php if("n" == get_option( 'updates_themes' )) echo "selected"; ?> value="n">No</option>
-								</select>
-							</td>
-							
-						</tr>
-					</table>
-					
-				</div>
 				
-				
-				<div id="tabs-cookies">
-					
-					<h2 class="title_migration">Configuración Cookies</h2>
-							 
-					<table class="form-table">		
-						<tr>
-							<th scope="row">Mostrar mensaje:</th>
-							<td>
-								<select name="display_message_cookies">
-									<option <?php if("y" == get_option( 'display_message_cookies' )) echo "selected"; ?> value="y">Si</option>
-									<option <?php if("n" == get_option( 'display_message_cookies' )) echo "selected"; ?> value="n">No</option>
-								</select>
-							</td>
-							<th scope="row">Ubicación del mensaje:</th>
-							<td>
-								<select name="position_cookies">
-									<option <?php if("bottom" == get_option( 'position_cookies' )) echo "selected"; ?> value="bottom">Abajo</option>
-									<option <?php if("top" == get_option( 'position_cookies' )) echo "selected"; ?> value="top">Arriba</option>
-								</select>
-							</td>
-							<th scope="row">Ocultar mensaje:</th>
-							<td>
-								<select name="hide_cookies">
-									<option <?php if("aceptar" == get_option( 'hide_cookies' )) echo "selected"; ?> value="aceptar">Aceptar</option>
-									<option <?php if("auto" == get_option( 'hide_cookies' )) echo "selected"; ?> value="auto">Automáticamente</option>
-								</select>
-							</td>
-							
-		
-						</tr>
-						<tr>			
-							<th scope="row">Texto button cookies:</th>
-							<td>
-								<input type="text" name="text_button_cookies" value="<?php if(get_option( 'text_button_cookies' ) == "") echo 'Aceptar'; else echo get_option( 'text_button_cookies' ); ?>"/>
-							</td>
-							<th scope="row">Mensaje cookies:</th>
-							<td colspan="3">
-								<input type="text" name="text_message_cookies" style="width: 100%;" value="<?php if(get_option( 'text_message_cookies' ) != "") echo get_option( 'text_message_cookies' ); else echo "Esta web utiliza cookies. Si sigues navegando entendemos que aceptas las"; ?>" />
-							</th>
-							<th scope="row">Texto enlace cookies:</th>
-							<td colspan="3">
-								<input type="text" name="link_text_cookies" style="width: 100%;" value="<?php if(get_option( 'link_text_cookies' ) != "") echo get_option( 'link_text_cookies' ); else echo "condiciones de uso."; ?>" />
-							</th>
-							
-						</td>
-						
-						<tr>
-							<th scope="row">Background color:</th>
-							<td>
-								<input type="color" name="background_color_cookies" value="<?php if(get_option( 'background_color_cookies' ) == "") echo '#ffffff'; else echo get_option( 'background_color_cookies' ); ?>"/>
-							</td>
-							<th scope="row">Font color:</th>
-							<td>
-								<input type="color" name="font_color_cookies" value="<?php if(get_option( 'font_color_cookies' ) == "") echo '#000000'; else echo get_option( 'font_color_cookies' ); ?>"/>
-							</td>
-							<th scope="row">Background color button:</th>
-							<td>
-								<input type="color" name="background_button_cookies" value="<?php if(get_option( 'background_button_cookies' ) == "") echo '#000000'; else echo get_option( 'background_button_cookies' ); ?>"/>
-							</td>
-							<th scope="row">Font color button:</th>
-							<td>
-								<input type="color" name="font_color_button_cookies" value="<?php if(get_option( 'font_color_button_cookies' ) == "") echo '#ffffff'; else echo get_option( 'font_color_button_cookies' ); ?>"/>
-							</td>																			
-						</tr>
-												
-						<tr>
-							<th scope="row">Titulo política cookies:</th>
-							<td>
-								<input type="text" name="title_politica_cookies" id="title_politica_cookies"  value="<?php if(get_option( 'title_politica_cookies')  == "") echo "Política de Cookies"; else echo get_option( 'title_politica_cookies' ); ?>"/>
-							</td>
-							<th scope="row">Slug política cookies:</th>
-							<td>
-								<input type="text" name="slug_politica_cookies" id="slug_politica_cookies" value="<?php if(get_option( 'slug_politica_cookies')  == "") echo "politica-cookies"; else echo get_option( 'slug_politica_cookies' ); ?>"/>
-							</td>
-							<th scope="row">Titulo información cookies:</th>
-							<td>
-								<input type="text" name="title_mas_informacion" id="title_mas_informacion" value="<?php if(get_option( 'title_mas_informacion')  == "") echo "Más información sobre las Cookies"; else echo get_option( 'title_mas_informacion' ); ?>"/>
-							</td>
-							<th scope="row">Slug información cookies:</th>
-							<td>
-								<input type="text" name="slug_mas_informacion" id="slug_mas_informacion" value="<?php if(get_option( 'slug_mas_informacion')  == "") echo "informacion-cookies"; else echo get_option( 'slug_mas_informacion' ); ?>"/>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">	
-								<input type="button" class="button button-primary" value="Crear páginas sobre las cookies" id="button_cookies_pages" />
-							</th>
-						</tr>
-					</table>
-					
-				</div>
-				
-				<div id="tabs-seguridad">
-					<h2 class="title_migration">Seguridad</h2>
-								 
-						<table class="form-table">		
-							<tr>
-								
-								<th scope="row">Recaptcha en login:</th>
-								<td>
-									<select name="recaptcha_google_activate">								
-										<option <?php if("n" == get_option( 'recaptcha_google_activate' )) echo "selected"; ?> value="n">No</option>
-										<option <?php if("y" == get_option( 'recaptcha_google_activate' )) echo "selected"; ?> value="y">Si</option>
-									</select>
-								</td>
-								<th scope="row">Clave del sitio (Recaptcha):</th>
-								<td>
-									<input type="text" id="recaptcha_site_key" name="recaptcha_site_key" value="<?php echo get_option( 'recaptcha_site_key' ); ?>"/>
-								</td>
-								<th scope="row">Clave secreta (Recaptcha):</th>
-								<td>
-									<input type="text" id="recaptcha_secret_key" name="recaptcha_secret_key" value="<?php echo get_option( 'recaptcha_secret_key' ); ?>"/>
-								</td>			
-							</tr>				
-						</table>
-						
-						<p><input type="button" class="button button-primary" value="Cambiar permisos de ficheros" id="button_permissions_files" /></p>
-				
-				</div>
-				
-				<div id="tabs-escaner">
-					<h2 class="title_migration">Escaner</h2>
-								 
-						<table class="form-table centered" id="scan_table">		
-						<thead>
-						<tr><th>Nombre fichero</th><th>Fecha modificación</th><th>Tamaño (bytes)</th><th>Permisos</th><th>Estado</th></tr></thead>
-												
-						</table>
-						
-						<p><input type="button" class="button button-primary" value="Escanear ficheros" id="button_scan_files" /></p>
-				</div>
-				
-				<div id="tabs-optimizador">
+				<div class="tab_content"  id="tabs-optimizador">
 					<h2 class="title_migration">Optimizador</h2>
 								 
 						<table class="form-table centered" id="scan_deleted_table">		
@@ -483,58 +547,7 @@ function migration_form()
 						<input type="button" class="button button-primary" value="Eliminar ficheros innecesarios" id="button_deleted_files" /></p>
 				</div>
 				
-				<div id="tabs-backups">
-					<h2 class="title_migration">Backups</h2>
-					
-					<table class="form-table centered" id="backups_table">		
-						<thead>
-						<tr><th>Nombre</th><th>Fecha de creación</th><th>Tamaño (MB)</th><th></th></tr></thead>
-						<tbody>
-						
-						<?php
-					
-							$dir = "../wp-content/plugins/".plugin_name."/backups/";
-
-							if ($dh = scandir($dir, SCANDIR_SORT_ASCENDING)) 
-							{
-								foreach ($dh as $file) 
-								{
-									if($file != "." && $file != "..")
-									{
-										echo "<tr><td>".$file." </td><td> ".date('Y/m/d - H:i:s', filemtime($dir.$file))." </td><td> ".substr((filesize($dir.$file)/1000000), 0, -4)."</td>
-										<td><a class='button button-primary' href='".$dir.$file."'>Descargar</a>&nbsp; <a id='del_".$file."' class='button button-primary delete_backups'>Eliminar</a></td></tr>";
-									}
-								}		
-							}
-						
-						?>
-												
-						</tbody>						
-						</table>
-
-						<div id="content_backups"></div>
-						<p>
-						
-						Generar backup: 
-						<select id="generate_backup_url">
-							<option value="db">Base de datos</option>							
-							<option value="../">Plugins</option>
-							<option value="../../themes/">Temas</option>
-							<option value="../../uploads/">Uploads</option>
-							<option value="../../../">Wordpress (ficheros)</option>
-							<option value="../../">WP-content</option>
-						</select>
-						
-						
-						<input type="button" class="button button-primary" value="Crear copia de seguridad" id="button_generate_backup" />
-						
-						<input type="text" id="url_old_wordpress" value="<?php echo get_home_url(); ?>"/>
-						
-						<input type="text" id="url_new_wordpress" />				
-						</p>
-				</div>
-
-				<div id="tabs-plugins">
+				<div class="tab_content"  id="tabs-plugins">
 					<h2 class="title_migration">Plugins recomendados</h2>
 								 
 						<table class="form-table centered" id="plugins_table">		
@@ -556,7 +569,7 @@ function migration_form()
 								"Updraft Plus" => array( "slug" => "updraftplus", "url" => "https://downloads.wordpress.org/plugin/updraftplus.1.12.12.zip"),
 								"WP Migrate DB" => array("slug" => "wp-migrate-db", "url" => "https://downloads.wordpress.org/plugin/wp-migrate-db.0.8.zip"),
 								"WP Mandrill" => array( "slug" => "wpmandrill", "url" => "https://downloads.wordpress.org/plugin/wpmandrill.zip"),
-								"WP Plugin Tutoriales" => array( "slug" => "wp-plugin-tutoriales.git", "url" => "https://gitlab.qdqmedia.com/optimiza/wp-plugin-tutoriales/repository/archive.zip")
+								"WP Plugin Tutoriales" => array( "slug" => "Lifeguard---OptimizaClick-master", "url" => "https://github.com/david1311/Lifeguard---OptimizaClick/archive/master.zip")
 								);
 									
 							//SE LISTAN QUE PLUGINS RECOMENDADOS ESTAN INSTALADOS
@@ -578,12 +591,40 @@ function migration_form()
 						
 				</div>
 				
-		
-				<div id="tabs-woocommerce">	
+				<div class="tab_content"  id="tabs-seguridad">
+					<h2 class="title_migration">Seguridad</h2>
+								 
+						<table class="form-table">		
+							<tr>
+								<th colspan="2">
+									<input type="button" class="button button-primary" value="Cambiar permisos de ficheros" id="button_permissions_files" />
+								</th>
+								<th scope="row">Recaptcha en login:</th>
+								<td>
+									<select name="recaptcha_google_activate">								
+										<option <?php if("n" == get_option( 'recaptcha_google_activate' )) echo "selected"; ?> value="n">No</option>
+										<option <?php if("y" == get_option( 'recaptcha_google_activate' )) echo "selected"; ?> value="y">Si</option>
+									</select>
+								</td>						
+							</tr>
+							<tr>
+								<th scope="row">Clave del sitio (Recaptcha):</th>
+								<td>
+									<input type="text" id="recaptcha_site_key" name="recaptcha_site_key" value="<?php echo get_option( 'recaptcha_site_key' ); ?>"/>
+								</td>
+								<th scope="row">Clave secreta (Recaptcha):</th>
+								<td>
+									<input type="text" id="recaptcha_secret_key" name="recaptcha_secret_key" value="<?php echo get_option( 'recaptcha_secret_key' ); ?>"/>
+								</td>			
+							</tr>				
+						</table>
+				</div>
+					
+				<div class="tab_content"  id="tabs-woocommerce">	
 				
 					<h2 class="title_migration">Woocommerce</h2>
 				
-					<table class="form-table">		
+					<table class="form-table woocommerce_table">		
 						<tr>
 							
 							<th scope="row">Modo catálogo:</th>
@@ -601,6 +642,8 @@ function migration_form()
 								</select>
 							</td>	
 							
+						</tr>
+						<tr>
 							<th scope="row">Modifcar productos por página:</th>
 							<td>
 								<select name="enable_produts_page">								
@@ -608,50 +651,24 @@ function migration_form()
 									<option <?php if("y" == get_option( 'enable_produts_page' )) echo "selected"; ?> value="y">Si</option>
 								</select>
 							</td>	
-							
 							<th scope="row">Productos por página:</th>
 							<td>
 								<input type="text" id="num_produts_page" name="num_produts_page" value="<?php if(get_option( 'num_produts_page' ) != "") echo get_option( 'num_produts_page' ); else echo 12; ?>"/>
 							</td>	
-							
-							
-						</tr>				
+						</tr>
 					</table>
 				</div>
-				
-				
+
 			</div>	
-			
-			<?php submit_button(); ?>
-			
+						
 			<input type="hidden" value="<?php echo WP_PLUGIN_URL."/".plugin_name."/"; ?>" id="url_base" />
 		</form>
 		
-		<div id="messages_plugin"></div>
+	
 		
   </div><?php 
 
 }   
-
-
-//SCRIPTS PARA LA GALERIA DE IMAGENES EN LAS OPCIONES DE LOGIN
-function my_admin_scripts() {    
-    wp_enqueue_script('media-upload');
-    wp_enqueue_script('thickbox');
-    wp_register_script('my-upload', WP_PLUGIN_URL.'/'.plugin_name.'/js/login.js', array('jquery','media-upload','thickbox'));
-    wp_enqueue_script('my-upload');
-}
-
-//ESTILOS PARA LA GALERIA DE IMAGENES EN LAS OPCIONES DE LOGIN
-function my_admin_styles() 
-{
-    wp_enqueue_style('thickbox');
-}
-
-//ACCIONES PARA HABILITAR LA GALERIA MULTIMEDIA EN LOS BOTONES DE IMAGENES PARA EL LOGIN
-add_action('admin_enqueue_scripts', 'my_admin_scripts');
-add_action('admin_print_styles', 'my_admin_styles');
-
 
 //SE REGISTRAN TODAS LAS OPCIONES DEL PLUGIN PARA QUE SE GUARDEN EN LA TABLA OPTIONS
 function migration_optmizaclick_register_options() 
@@ -718,7 +735,6 @@ function migration_optmizaclick_register_options()
 function custom_admin_js() 
 {
 	wp_enqueue_script( 'migration_script', WP_PLUGIN_URL. '/'.plugin_name.'/js/migration.js', array('jquery') );
-	wp_enqueue_script( 'jquery-ui_script', WP_PLUGIN_URL. '/'.plugin_name.'/jquery-ui/jquery-ui.min.js', array('jquery') );
 	
 	wp_enqueue_script( 'colorpicker_script', WP_PLUGIN_URL. '/'.plugin_name.'/colorpicker/js/colorpicker.js', array('jquery') );
 	wp_enqueue_script( 'colorpicker_eye', WP_PLUGIN_URL. '/'.plugin_name.'/colorpicker/js/eye.js', array('jquery') );
@@ -734,16 +750,13 @@ function custom_admin_js()
 //FUNCION PARA CARGAR ESTILOS EN EL ADMINISTRADOR
 function custom_admin_styles() 
 {
-	wp_register_style( 'custom_wp_admin_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/migration-style.css', false, '1.0.0' );
-	wp_register_style( 'jquery-ui-css', WP_PLUGIN_URL. '/'.plugin_name.'/jquery-ui/jquery-ui.min.css', false, '1.0.0' );
-	
+	wp_register_style( 'custom_wp_admin_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/migration-style.css', false, '1.0.0' );	
 	wp_register_style( 'custom_colorpicker', WP_PLUGIN_URL. '/'.plugin_name.'/colorpicker/css/colorpicker.css', false, '1.0.0' );
 	wp_register_style( 'colorpicker_layout', WP_PLUGIN_URL. '/'.plugin_name.'/colorpicker/css/layout.css', false, '1.0.0' );
 	
 	wp_register_style( 'datatables', 'http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css', false, '1.0.0' );
 	
 	wp_enqueue_style( 'custom_wp_admin_css' );
-	wp_enqueue_style( 'jquery-ui-css' );
 	wp_enqueue_style( 'custom_colorpicker' );
 	wp_enqueue_style( 'custom_colorpicker' );
 	wp_enqueue_style( 'datatables' );
@@ -764,7 +777,7 @@ if(get_option('updates_plugins') == "n")
 //FUNCION PARA CARGAR ESTILOS Y SCRIPTS EN LA PAGINA
 function custom_js_styles() 
 {
-	wp_enqueue_script( 'jquery-ui_script', WP_PLUGIN_URL. '/'.plugin_name.'/js/cookies.js', array('jquery') );
+	wp_enqueue_script( 'cookies_script', WP_PLUGIN_URL. '/'.plugin_name.'/js/cookies.js', array('jquery') );
 	
 	wp_register_style( 'custom_wp_css', WP_PLUGIN_URL. '/'.plugin_name.'/css/front-style.css', false, '1.0.0' );
 	
