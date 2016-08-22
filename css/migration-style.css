@@ -28,7 +28,7 @@
 
 #scan_table td, #scan_table th, #scan_deleted_table td, #scan_deleted_table th, #plugins_table td, #plugins_table th, #backups_table td, #backups_table th{border: 1px solid #555555;}
 
-#messages_plugin{background-color: #00B2DB; color: #fff; padding: 10px 25px;display: none;float: left; position: absolute; top: 18px;left:190px;}
+.wrap_migration #messages_plugin{background-color: #00B2DB; color: #fff; padding: 10px 25px;display: none;float: left; position: absolute; top: 18px;left:190px;}
 
 .tab_content{display: none;padding-bottom: 20px;}
 
@@ -43,8 +43,6 @@
 #tabs ul li:first-child{border-top: solid #fff 1px; }
 
 #content_plugin_tabs{width: auto;padding: 10px 20px;background-color: #fbfbfb;margin-top: 32px;margin-left: 190px;margin-right: 25px;}
-
-.wp-admin #wpfooter{display: none;}
 
 .wrap_migration .submit{position: fixed; margin-top: 0px;padding-top: 0px; }
 
@@ -107,7 +105,7 @@
 #load_div{font-size: 50px; width: 50px; height: 50px; position: absolute; top: 12px;left: 185px; display: none;}
 
 
-.loading{
+.wrap_migration .loading{
 	 -webkit-animation-name: spin;
     -webkit-animation-duration: 1000ms;
     -webkit-animation-iteration-count: infinite;
@@ -144,3 +142,5 @@
         transform:rotate(360deg);
     }
 }
+
+#user_menu_admin{max-width: 100px !important; display: inline-block !important;margin-left: 12px;}

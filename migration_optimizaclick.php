@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 2.1.1
+Version: 2.1.2
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -66,8 +66,13 @@ function migration_form()
 				
 			
 				
-		<?php settings_fields( 'migration_optimizaclick_options' ); ?>
-		<?php do_settings_sections( 'migration_optimizaclick_options' ); ?>		
+		<?php 
+			settings_fields( 'migration_optimizaclick_options' ); 
+			do_settings_sections( 'migration_optimizaclick_options' ); 
+			
+			$current_user = wp_get_current_user();
+			
+			?>		
 		
 			<div id="messages_plugin"></div>
 			
@@ -75,6 +80,7 @@ function migration_form()
 								
 				<ul>
 					<li class="tab_links" title="#tabs-actualizaciones">Actualizaciones</li>
+					<li class="tab_links" title="#tabs-admin-menu">Admin Menú</li>
 					<li class="tab_links" title="#tabs-aviso-legal">Aviso Legal</li>
 					<li class="tab_links" title="#tabs-backups">Backups</li>
 					<li class="tab_links" title="#tabs-cookies">Cookies</li>
@@ -124,6 +130,66 @@ function migration_form()
 						</tr>
 					</table>
 					
+				</div>
+				
+				<div class="tab_content"  id="tabs-admin-menu">
+					
+					<h2 class="title_migration">Configuración Menú de Administración</h2>
+					
+					
+					<table class="form-table">
+
+					<tr>
+						<td colspan="2"><h4>Marcar las opciones del menú que se desean ocultar: </h4></td>
+						<td colspan="2"><p>Estas opciones no se ocultarán para el usuario:
+						<input type="text" name="user_menu_admin" id="user_menu_admin" value="<?php if( get_option( 'user_menu_admin' ) == "") echo $current_user->user_login; else echo get_option( 'user_menu_admin' ); ?>" /></p></td>
+					</tr>
+					
+					<?php
+					
+					global $menu;
+					
+					$admin_menu = get_option("migration_plugin_admin_menu_data");
+					
+					$x = 0;
+	
+					foreach($menu as $item)
+					{		
+						if($item[0] != "")
+						{
+							if($x % 4 == 0)
+								echo "<tr>";
+							
+							if(strpos($item[0], "<span") > 0)
+								$name = substr($item[0], 0, strpos($item[0], " "));
+							else
+								$name = $item[0];
+							
+							echo "<td><p class='admin_menu_check'><input type='checkbox' ";
+							
+							if($admin_menu[$item[2]] == 1) echo " checked ";
+
+							echo " class='value_check' />";
+							
+							echo "<input type='hidden' class='admin_menu_name'  value='".$item[2]."' /> ".$name."</p></td>";
+							
+							$x++;
+							
+							if($x % 4 == 0)
+								echo "</tr>";	
+						}		
+			
+					}
+					
+					?>
+					<tr>
+						<td colspan="4">	
+							<input type="button" class="button button-primary" value="Aplicar cambios" id="save_admin_menu" />
+						</td>
+					</tr>
+
+					</table>
+
 				</div>
 			  
 				<div class="tab_content"  id="tabs-aviso-legal">
@@ -536,7 +602,8 @@ function migration_form()
 				
 				<div class="tab_content"  id="tabs-optimizador">
 					<h2 class="title_migration">Optimizador</h2>
-								 
+					
+ 
 						<table class="form-table centered" id="scan_deleted_table">		
 						<thead>
 						<tr><th>Nombre fichero</th><th>Fecha modificación</th><th>Tamaño (bytes)</th><th>Permisos</th></tr></thead>
@@ -562,14 +629,17 @@ function migration_form()
 							//ARRAY CON LOS DATOS DE PLUGINS RECOMENDADOS
 							$plugins = array(
 								"Akismet" => array( "slug" => "akismet", "url" => "https://downloads.wordpress.org/plugin/akismet.3.1.11.zip"),
-								"All in One SEO Pack" => array( "slug" => "all-in-one-seo-pack", "url" => "https://downloads.wordpress.org/plugin/all-in-one-seo-pack.2.3.4.2.zip"),
+								"All in One SEO Pack" => array( "slug" => "all-in-one-seo-pack", "url" => "https://downloads.wordpress.org/plugin/all-in-one-seo-pack.2.3.5.1.zip"),
 								"Contact form to Database" => array( "slug" => "contact-form-7-to-database-extension", "url" => "https://downloads.wordpress.org/plugin/contact-form-7-to-database-extension.2.10.13.zip"),
 								"Contact Form 7" => array( "slug" => "contact-form-7", "url" => "https://downloads.wordpress.org/plugin/contact-form-7.4.4.2.zip"),
-								"Insert Codes Plugin" => array( "slug" => "insert-codes-plugin-master", "url" => "https://github.com/Optimiza-Click/insert-codes-plugin/archive/master.zip"),			
-								"Updraft Plus" => array( "slug" => "updraftplus", "url" => "https://downloads.wordpress.org/plugin/updraftplus.1.12.12.zip"),
+								"Insert Codes Plugin" => array( "slug" => "insert-codes-plugin-master", "url" => "https://github.com/Optimiza-Click/insert-codes-plugin/archive/master.zip"),
+								"P3 Profiler" => array( "slug" => "p3-profiler", "url" => "https://downloads.wordpress.org/plugin/p3-profiler.1.5.3.9.zip"),								
+								"Updraft Plus" => array( "slug" => "updraftplus", "url" => "https://downloads.wordpress.org/plugin/updraftplus.1.12.13.zip"),
+								"WooCommerce Google Analytics" => array( "slug" => "woocommerce-google-analytics-integration", "url" => "https://downloads.wordpress.org/plugin/woocommerce-google-analytics-integration.1.4.0.zip"),
 								"WP Mandrill" => array( "slug" => "wpmandrill", "url" => "https://downloads.wordpress.org/plugin/wpmandrill.zip"),
 								"WP Migrate DB" => array("slug" => "wp-migrate-db", "url" => "https://downloads.wordpress.org/plugin/wp-migrate-db.0.8.zip"),
 								"WP Plugin Tutoriales" => array( "slug" => "Lifeguard---OptimizaClick-master", "url" => "https://github.com/david1311/Lifeguard---OptimizaClick/archive/master.zip")
+								
 								);
 									
 							//SE LISTAN QUE PLUGINS RECOMENDADOS ESTAN INSTALADOS
@@ -664,7 +734,7 @@ function migration_form()
 			<input type="hidden" value="<?php echo WP_PLUGIN_URL."/".plugin_name."/"; ?>" id="url_base" />
 		</form>
 		
-	
+		<style>div.notice, .update-nag, #wpfooter,  #message{display: none !important;}</style>
 		
   </div><?php 
 
@@ -728,8 +798,39 @@ function migration_optmizaclick_register_options()
 	register_setting( 'migration_optimizaclick_options', 'catalog_mode_price' );	
 	register_setting( 'migration_optimizaclick_options', 'num_produts_page' );	
 	register_setting( 'migration_optimizaclick_options', 'enable_produts_page' );	
-	
+	register_setting( 'migration_optimizaclick_options', 'user_menu_admin' );
 }
+
+//FUNCION PARA OCULTAR LAS OPCIONE DEL MENU DE ADMINISTRACION
+function hide_menu_options()
+{
+	global $menu;
+	
+	$current_user = wp_get_current_user();
+	
+	//SE COMPRUEBA CUAL ES EL USUARIO CON EL QUE SE INICIO SESION
+	if( get_option( 'user_menu_admin' ) != $current_user->user_login)
+	{
+		$admin_menu = get_option("migration_plugin_admin_menu_data");
+		
+		//SE COMPRUEBA CADA OPCION DEL MENU PARA OCULTARLA EN EL CASO CORRESPONDIENTE
+		foreach($menu as $item)
+		{		
+			if($admin_menu[$item[2]] == 1)
+			{
+				remove_menu_page($item[2]);
+			}	
+		}
+			
+		//EN EL CASO DEL VISUAL COMPOSER HAY QUE COMPROBARLO DIFERENTE POR EL CAMBIO DE SLUG
+		if($admin_menu["vc-general"] == 1)
+			remove_menu_page("vc-welcome");
+	}
+}
+
+//ACCION PARA OCULTAR LAS OPCIONE DEL MENU DE ADMINISTRACION
+add_action('admin_init', "hide_menu_options");
+
 
 //FUNCION PARA CARGAR SCRIPTS EN EL ADMINISTRADOR
 function custom_admin_js() 

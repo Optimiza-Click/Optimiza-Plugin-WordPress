@@ -313,4 +313,36 @@
 		jQuery('#height_login_image').val(img.height);
 		jQuery('#width_login_image').val(img.width);
     });
+	
+	//BOTON PARA GUARDAR LA CONFIGURACION DEL ADMIN MENU
+	jQuery("#save_admin_menu").click(function()
+	{		
+		jQuery("#load_div").addClass("loading");
+		
+		var values = {};
+
+		var checks = jQuery(".admin_menu_check");
+		
+		checks.each(function(){
+			
+			values[jQuery(this).find(".admin_menu_name").val()] = jQuery(this).find(".value_check:checked").length;
+
+		});
+		
+		var request = jQuery.ajax({
+			  url: jQuery( "#url_base").val() + "menu.php", 
+			  method: "POST",
+			  data: { values :  values  }	
+		});
+			 
+		request.done(function( msg ) 
+		{					
+			jQuery("#load_div").removeClass("loading");
+			
+			view_messages(msg);
+		});
+	});
+		
+	
+	
 }); 
