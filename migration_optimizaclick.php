@@ -70,8 +70,6 @@ function migration_form()
 			settings_fields( 'migration_optimizaclick_options' ); 
 			do_settings_sections( 'migration_optimizaclick_options' ); 
 			
-			$current_user = wp_get_current_user();
-			
 			?>		
 		
 			<div id="messages_plugin"></div>
@@ -83,6 +81,7 @@ function migration_form()
 					<li class="tab_links" title="#tabs-admin-menu">Admin Menú</li>
 					<li class="tab_links" title="#tabs-aviso-legal">Aviso Legal</li>
 					<li class="tab_links" title="#tabs-backups">Backups</li>
+					<li class="tab_links" title="#tabs-contact-form">Contact Form</li>
 					<li class="tab_links" title="#tabs-cookies">Cookies</li>
 					<li class="tab_links" title="#tabs-escaner">Escáner</li>
 					<li class="tab_links" title="#tabs-footer">Footer</li>			
@@ -140,10 +139,33 @@ function migration_form()
 					<table class="form-table">
 
 					<tr>
-						<td colspan="2"><h4>Marcar las opciones del menú que se desean ocultar: </h4></td>
-						<td colspan="2"><p>Estas opciones no se ocultarán para el usuario:
-						<input type="text" name="user_menu_admin" id="user_menu_admin" value="<?php if( get_option( 'user_menu_admin' ) == "") echo $current_user->user_login; else echo get_option( 'user_menu_admin' ); ?>" /></p></td>
+						<td colspan="2"><input type="button" class="button button-primary" id="checked_checkboxes_btn" value="Marcar todos" /> 
+						<input type="button" class="button button-primary" id="unchecked_checkboxes_btn" value="Desmarcar todos" /></td>
+						
+						<td colspan="2"><p>Estas opciones <strong>NO</strong> se ocultarán para el usuario:
+						
+						
+						<select name="user_menu_admin" id="user_menu_admin">
+						
+						<?php $args = array('orderby' => 'ID','order' => 'ASC' ); 
+						$users = get_users( $args ); 
+						
+						foreach($users as $user)
+						{
+							echo "<option ";
+
+							if(get_option( 'user_menu_admin' ) == $user->ID)
+								echo " selected='selected' ";
+							
+							echo "value='".$user->ID."'>".$user->user_login."</option>";
+						}
+						
+						?>
+						
+						</select>
+
 					</tr>
+			
 					
 					<?php
 					
@@ -302,6 +324,22 @@ function migration_form()
 								</td>
 							</tr>
 						</table>
+				</div>
+				
+				<div class="tab_content"  id="tabs-contact-form">
+					
+					<h2 class="title_migration">Configuración Contact Form</h2>
+					
+						<p class="contact_p">Generar contact form según el maquetador visual de la plantilla: 
+
+						<select name="contact_form_type" id="contact_form_type">
+							<option value="composer">Visual Composer</option>
+							<option value="avada">Avada</option>
+						</select>
+
+						<input type="button" class="button button-primary" value="Generar Contact Form" id="generate_form" /></p>
+
+					
 				</div>
 				
 				<div class="tab_content"  id="tabs-cookies">
@@ -809,7 +847,7 @@ function hide_menu_options()
 	$current_user = wp_get_current_user();
 	
 	//SE COMPRUEBA CUAL ES EL USUARIO CON EL QUE SE INICIO SESION
-	if( get_option( 'user_menu_admin' ) != $current_user->user_login)
+	if( get_option( 'user_menu_admin' ) != $current_user->ID)
 	{
 		$admin_menu = get_option("migration_plugin_admin_menu_data");
 		

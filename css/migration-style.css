@@ -143,4 +143,8 @@
     }
 }
 
-#user_menu_admin{max-width: 100px !important; display: inline-block !important;margin-left: 12px;}
+#user_menu_admin{width: 200px !important; display: inline-block !important;margin-left: 12px;}
+
+.contact_p{padding: 10px 30px; }
+
+.contact_p select{min-width: 300px;}

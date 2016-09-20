@@ -343,6 +343,35 @@
 		});
 	});
 		
+		
+	jQuery("#checked_checkboxes_btn").click(function()
+	{		
+		jQuery('input[type=checkbox]').prop('checked', true);
+	});	
+		
+	jQuery("#unchecked_checkboxes_btn").click(function()
+	{		
+		jQuery('input[type=checkbox]').prop('checked', false);
+	});		
 	
+	//BOTON PARA GENERAR UN NUEVO CONTACT FORM
+	jQuery("#generate_form").click(function()
+	{		
+		jQuery("#load_div").addClass("loading");
+				
+		var request = jQuery.ajax({
+			  url: jQuery( "#url_base").val() + "form.php", 
+			  method: "POST",
+			  data: { form_type :  jQuery( "#contact_form_type").val()  }	
+		});
+			 
+		request.done(function( msg ) 
+		{					
+			jQuery("#load_div").removeClass("loading");
+			
+			view_messages(msg);
+		});
+	});
+		
 	
 }); 
