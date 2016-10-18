@@ -22,7 +22,7 @@ function create_form($type)
 
 <div class="vc_col-sm-12"><p>[textarea* your-message placeholder "Mensaje"] </p></div>
 
-<div class="vc_col-sm-12"><p>[acceptance acceptance-10] Acepto la <a target="_blank"  href="#" target="_blank">Política de Privacidad</a></p></div>
+<div class="vc_col-sm-12"><p>[acceptance acceptance-10] Acepto la <a target="_blank" href="#">Política de Privacidad</a></p></div>
 
 <div class="vc_col-sm-12"><p><br/>[submit "Enviar"]</p></div>';
 
@@ -35,6 +35,19 @@ function create_form($type)
 <div class="fusion-one-half fusion-layout-column fusion-column-last fusion-spacing-yes"><p>[email* your-email placeholder "E-mail"]</p></div>
 <div class="fusion-one-half fusion-layout-column fusion-spacing-yes"><p>[text* your-phone placeholder "Teléfono"]</p></div>
 <div class="fusion-one-half fusion-layout-column fusion-column-last fusion-spacing-yes"><p>[text your-subject placeholder "Asunto"]</p></div>
+<p>[textarea* your-message placeholder "Mensaje"] </p>
+<p>[acceptance acceptance-10] Acepto la <a target="_blank" href="">Política de Privacidad</a></p>
+<p>[submit "Enviar"]</p>';
+
+	}
+		elseif($type == "flatsome")
+	{
+		
+		$content = '
+<div class="small-12 large-6 columns"><p>[text* your-name placeholder "Nombre"]</p></div>
+<div class="small-12 large-6 columns"><p>[email* your-email placeholder "E-mail"]</p></div>
+<div class="small-12 large-6 columns"><p>[text* your-phone placeholder "Teléfono"]</p></div>
+<div class="small-12 large-6 columns"><p>[text your-subject placeholder "Asunto"]</p></div>
 <p>[textarea* your-message placeholder "Mensaje"] </p>
 <p>[acceptance acceptance-10] Acepto la <a target="_blank" href="">Política de Privacidad</a></p>
 <p>[submit "Enviar"]</p>';
