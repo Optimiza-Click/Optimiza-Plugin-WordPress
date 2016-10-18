@@ -1243,6 +1243,4 @@ function deactivate_cron_accions()
 {
 	wp_clear_scheduled_hook('optimiza_plugin_auto_update');
 	wp_clear_scheduled_hook('optimiza_notifications');
-}
-
-?>
+} ?>

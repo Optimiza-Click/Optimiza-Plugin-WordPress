@@ -71,6 +71,4 @@ Este mensaje se ha enviado desde un formulario de contacto', "recipient" => "", 
 		
 	echo "Formulario generado correctamente. " ;
 
-}
-
-?>
+} ?>
