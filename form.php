@@ -22,7 +22,7 @@ function create_form($type)
 
 <div class="vc_col-sm-12"><p>[textarea* your-message placeholder "Mensaje"] </p></div>
 
-<div class="vc_col-sm-12"><p>[acceptance acceptance-10] Acepto la <a target="_blank"  href="#" target="_blank">Política de Privacidad</a></p></div>
+<div class="vc_col-sm-12"><p>[acceptance acceptance-10] Acepto la <a target="_blank" href="#">Política de Privacidad</a></p></div>
 
 <div class="vc_col-sm-12"><p><br/>[submit "Enviar"]</p></div>';
 
