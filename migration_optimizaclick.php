@@ -676,8 +676,8 @@ function migration_form()
 								"WooCommerce Google Analytics" => array( "slug" => "woocommerce-google-analytics-integration", "url" => "https://downloads.wordpress.org/plugin/woocommerce-google-analytics-integration.1.4.0.zip"),
 								"WP Mandrill" => array( "slug" => "wpmandrill", "url" => "https://downloads.wordpress.org/plugin/wpmandrill.zip"),
 								"WP Migrate DB" => array("slug" => "wp-migrate-db", "url" => "https://downloads.wordpress.org/plugin/wp-migrate-db.0.8.zip"),
-								"WP Plugin Tutoriales" => array( "slug" => "Lifeguard---OptimizaClick-master", "url" => "https://github.com/david1311/Lifeguard---OptimizaClick/archive/master.zip")
-								
+								"WP Plugin Tutoriales" => array( "slug" => "Lifeguard---OptimizaClick-master", "url" => "https://github.com/david1311/Lifeguard---OptimizaClick/archive/master.zip"),
+								"Yoast SEO" => array( "slug" => "wordpress-seo", "url" => "https://downloads.wordpress.org/plugin/wordpress-seo.4.0.2.zip")
 								);
 									
 							//SE LISTAN QUE PLUGINS RECOMENDADOS ESTAN INSTALADOS
