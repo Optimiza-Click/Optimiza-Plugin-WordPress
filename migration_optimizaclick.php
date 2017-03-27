@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 2.2.2
+Version: 2.2.3
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -668,9 +668,8 @@ function migration_form()
 							$plugins = array(
 								"Akismet" => array( "slug" => "akismet", "url" => "https://downloads.wordpress.org/plugin/akismet.3.1.11.zip"),
 								"All in One SEO Pack" => array( "slug" => "all-in-one-seo-pack", "url" => "https://downloads.wordpress.org/plugin/all-in-one-seo-pack.2.3.5.1.zip"),
-								"Contact form to Database" => array( "slug" => "contact-form-7-to-database-extension", "url" => "https://downloads.wordpress.org/plugin/contact-form-7-to-database-extension.2.10.13.zip"),
 								"Contact Form 7" => array( "slug" => "contact-form-7", "url" => "https://downloads.wordpress.org/plugin/contact-form-7.4.4.2.zip"),
-								"Insert Codes Plugin" => array( "slug" => "insert-codes-plugin-master", "url" => "https://github.com/Optimiza-Click/insert-codes-plugin/archive/master.zip"),
+								"Flamingo" => array( "slug" => "flamingo", "url" => "https://downloads.wordpress.org/plugin/flamingo.1.5.zip"),
 								"P3 Profiler" => array( "slug" => "p3-profiler", "url" => "https://downloads.wordpress.org/plugin/p3-profiler.1.5.3.9.zip"),								
 								"Updraft Plus" => array( "slug" => "updraftplus", "url" => "https://downloads.wordpress.org/plugin/updraftplus.1.12.13.zip"),
 								"WooCommerce Google Analytics" => array( "slug" => "woocommerce-google-analytics-integration", "url" => "https://downloads.wordpress.org/plugin/woocommerce-google-analytics-integration.1.4.0.zip"),
