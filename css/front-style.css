@@ -12,8 +12,10 @@
 
 #btn_cookies{padding: 8px 35px; font-size: 12px; line-height: 46px; text-decoration: none;border: 0px !important; cursor: pointer;}
 
-.columns_1_4_footer{float: left; width: 18%; padding: 1% !important;}
-.columns_1_2_footer{float: left; width: 58%; padding: 1% !important;}
+.columns_1_4_footer a img{padding-top: 12px !important;}
+
+.columns_1_4_footer{float: left; width: 20%; padding: 1% !important;}
+.columns_1_2_footer{float: left; width: 60%; padding: 1% !important;}
 
 @media screen and (max-width: 780px)
 {
@@ -23,4 +25,3 @@
 	
 	.columns_1_4_footer, .columns_1_2_footer{float: left; width: 100%; padding: 1% 0.5% !important;}
 }
-
