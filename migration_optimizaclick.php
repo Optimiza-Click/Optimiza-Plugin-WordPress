@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 2.2.3
+Version: 2.2.4
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -536,6 +536,15 @@ function migration_form()
 								<input type="text" name="alt_logo_optimizaclick" value="<?php if(get_option( 'alt_logo_optimizaclick' ) == "") echo 'Posicionamiento SEO'; else echo get_option( 'alt_logo_optimizaclick' ); ?>"/>
 							</td>
 						</tr>
+						<tr>
+							<th scope="row">Title logo Optimizaclick:</th>
+							<td>
+								<input type="text" name="title_logo_optimizaclick" value="<?php if(get_option( 'title_logo_optimizaclick' ) == "") echo 'Agencia SEO'; else echo get_option( 'title_logo_optimizaclick' ); ?>"/>
+							</td>
+
+
+							
+						</tr>
 					</table>
 					
 					<div id="prev_logo_optimizaclick" style="background-image: url('<?php echo WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version'); ?>')"></div>
@@ -836,6 +845,7 @@ function migration_optmizaclick_register_options()
 	register_setting( 'migration_optimizaclick_options', 'num_produts_page' );	
 	register_setting( 'migration_optimizaclick_options', 'enable_produts_page' );	
 	register_setting( 'migration_optimizaclick_options', 'user_menu_admin' );
+	register_setting( 'migration_optimizaclick_options', 'title_logo_optimizaclick' );
 }
 
 //FUNCION PARA OCULTAR LAS OPCIONE DEL MENU DE ADMINISTRACION
@@ -1090,7 +1100,7 @@ function footer_content()
 	//SE MUESTRA EL LOGO DE OPTIMIZACLICK
 	if(get_option('optimiza_logo_display') == 'y')
 		echo	'<a style="float:right;padding-right: 5%;" href="http://www.optimizaclick.com/" target="_blank" title="'.get_option('alt_logo_optimizaclick').'">
-			<img src="'.WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version').'" alt="'.get_option('alt_logo_optimizaclick').'" />
+			<img src="'.WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version').'" alt="'.get_option('alt_logo_optimizaclick').'" title="'.get_option('title_logo_optimizaclick').'" />
 		</a>';
 		
 	echo '</div></div></div>';
