@@ -5,7 +5,7 @@ Description: Plugin automatizador de tareas para completar la migración de una 
 Author: Departamento de Desarrollo - Optimizaclick
 Author URI: http://www.optimizaclick.com/
 Text Domain: Optimizaclick Migration Plugin
-Version: 2.2.4
+Version: 2.2.5
 Plugin URI: http://www.optimizaclick.com/
 */
 
@@ -541,6 +541,10 @@ function migration_form()
 							<td>
 								<input type="text" name="title_logo_optimizaclick" value="<?php if(get_option( 'title_logo_optimizaclick' ) == "") echo 'Agencia SEO'; else echo get_option( 'title_logo_optimizaclick' ); ?>"/>
 							</td>
+							<th scope="row">Title logo link Optimizaclick:</th>
+							<td>
+								<input type="text" name="title_logo_link_optimizaclick" value="<?php if(get_option( 'title_logo_link_optimizaclick' ) == "") echo 'Agencia SEO'; else echo get_option( 'title_logo_link_optimizaclick' ); ?>"/>
+							</td>
 
 
 							
@@ -846,6 +850,7 @@ function migration_optmizaclick_register_options()
 	register_setting( 'migration_optimizaclick_options', 'enable_produts_page' );	
 	register_setting( 'migration_optimizaclick_options', 'user_menu_admin' );
 	register_setting( 'migration_optimizaclick_options', 'title_logo_optimizaclick' );
+	register_setting( 'migration_optimizaclick_options', 'title_logo_link_optimizaclick' );
 }
 
 //FUNCION PARA OCULTAR LAS OPCIONE DEL MENU DE ADMINISTRACION
@@ -1099,7 +1104,7 @@ function footer_content()
 	
 	//SE MUESTRA EL LOGO DE OPTIMIZACLICK
 	if(get_option('optimiza_logo_display') == 'y')
-		echo	'<a style="float:right;padding-right: 5%;" href="http://www.optimizaclick.com/" target="_blank" title="'.get_option('alt_logo_optimizaclick').'">
+		echo	'<a style="float:right;padding-right: 5%;" href="http://www.optimizaclick.com/" target="_blank" title="'.get_option('title_logo_link_optimizaclick').'">
 			<img src="'.WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version').'" alt="'.get_option('alt_logo_optimizaclick').'" title="'.get_option('title_logo_optimizaclick').'" />
 		</a>';
 		
