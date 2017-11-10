@@ -533,7 +533,7 @@ function migration_form()
 							</td>
 							<th scope="row">Alt logo Optimizaclick:</th>
 							<td>
-								<input type="text" name="alt_logo_optimizaclick" value="<?php if(get_option( 'alt_logo_optimizaclick' ) == "") echo 'Posicionamiento SEO'; else echo get_option( 'alt_logo_optimizaclick' ); ?>"/>
+								<input type="text" name="alt_logo_optimizaclick" value="<?php if(get_option( 'alt_logo_optimizaclick' ) == "") echo 'Optimizaclick'; else echo get_option( 'alt_logo_optimizaclick' ); ?>"/>
 							</td>
 						</tr>
 						<tr>
