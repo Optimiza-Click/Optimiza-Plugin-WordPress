@@ -539,11 +539,11 @@ function migration_form()
 						<tr>
 							<th scope="row">Title logo Optimizaclick:</th>
 							<td>
-								<input type="text" name="title_logo_optimizaclick" value="<?php if(get_option( 'title_logo_optimizaclick' ) == "") echo 'Agencia SEO'; else echo get_option( 'title_logo_optimizaclick' ); ?>"/>
+								<input type="text" name="title_logo_optimizaclick" value="<?php if(get_option( 'title_logo_optimizaclick' ) == "") echo 'Optimizaclick'; else echo get_option( 'title_logo_optimizaclick' ); ?>"/>
 							</td>
 							<th scope="row">Title logo link Optimizaclick:</th>
 							<td>
-								<input type="text" name="title_logo_link_optimizaclick" value="<?php if(get_option( 'title_logo_link_optimizaclick' ) == "") echo 'Agencia SEO'; else echo get_option( 'title_logo_link_optimizaclick' ); ?>"/>
+								<input type="text" name="title_logo_link_optimizaclick" value="<?php if(get_option( 'title_logo_link_optimizaclick' ) == "") echo 'Optimizaclick'; else echo get_option( 'title_logo_link_optimizaclick' ); ?>"/>
 							</td>
 
 
