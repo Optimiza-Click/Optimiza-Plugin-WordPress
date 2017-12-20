@@ -1104,7 +1104,7 @@ function footer_content()
 	
 	//SE MUESTRA EL LOGO DE OPTIMIZACLICK
 	if(get_option('optimiza_logo_display') == 'y')
-		echo	'<a style="float:right;padding-right: 5%;" href="http://www.optimizaclick.com/" target="_blank" title="'.get_option('title_logo_link_optimizaclick').'">
+		echo	'<a style="float:right;padding-right: 5%;" href="https://www.optimizaclick.com/" target="_blank" title="'.get_option('title_logo_link_optimizaclick').'">
 			<img src="'.WP_PLUGIN_URL.'/'.plugin_name.'/img/'.get_option('optimiza_logo_version').'" alt="'.get_option('alt_logo_optimizaclick').'" title="'.get_option('title_logo_optimizaclick').'" />
 		</a>';
 		
