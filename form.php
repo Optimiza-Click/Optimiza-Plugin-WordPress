@@ -24,7 +24,7 @@ function create_form($type)
 
 <div class="vc_col-sm-12"><p>[acceptance acceptance-10] Acepto la <a target="_blank" href="#">Política de Privacidad</a></p></div>
 
-<div class="vc_col-sm-12"><p><br/>[submit "Enviar"]</p></div>';
+<div class="vc_col-sm-12"><p>[submit "Enviar"]</p></div>';
 
 	}
 	elseif($type == "avada")
